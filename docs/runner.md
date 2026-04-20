@@ -76,7 +76,7 @@ ARM64 | 3 (M1) | $0.062
 ARM64 | 5 (M2 Pro) | $0.102
 
 ### Self hosted
-Sinds 1 Januarri 2016 worden er kosten in kaart gebracht voor het hosten van een eigen runner. Deze kosten bedragen **$0.002 per minuut**, onafhankelijk welk soort model je gebruikt.
+Sinds 1 Januarri 2026 worden er kosten in kaart gebracht voor het hosten van een eigen runner. Deze kosten bedragen **$0.002 per minuut**, onafhankelijk welk soort model je gebruikt.
 
 ## Self hosted runner hosten
 Op een device kan je standaard **één** runner hosten via de terminal. Het nadeel hiervan is dat deze terminal altijd open moet staan en dat je er maar één runner kan draaien, wat vervelend is als je bezig bent met meerdere projecten.
