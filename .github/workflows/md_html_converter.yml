@@ -21,14 +21,11 @@ jobs:
 
       - name: Convert Markdown naar HTML
         run: |
-          for file in $(find docs -name "*.md"); do
-            encoding=$(file -bi "$file")
-
-            if [[ $encoding == *"utf-16"* ]]; then
-              iconv -f utf-16 -t utf-8 "$file" > "${file}.utf8"
-              pandoc "${file}.utf8" -o "${file%.md}.html"
+          find docs -name "*.md" -print0 | while IFS= read -r -d '' file; do
+            if file "$file" | grep -q UTF-16; then
+              iconv -f utf-16 -t utf-8 "$file" | pandoc -f markdown -t html -o "${file%.md}.html"
             else
-              pandoc "$file" -o "${file%.md}.html"
+              pandoc "$file" -f markdown -t html -o "${file%.md}.html"
             fi
           done
 
