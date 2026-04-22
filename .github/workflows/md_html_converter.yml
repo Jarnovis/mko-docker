@@ -7,6 +7,8 @@ on:
       - 'docs/**/*.md'  
 jobs:
   build:
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     permissions:
       contents: write
     
@@ -21,13 +23,19 @@ jobs:
 
       - name: Convert Markdown naar HTML
         run: |
+          mkdir -p docs/html
+
           find docs -name "*.md" -print0 | while IFS= read -r -d '' file; do
+            out="docs/html/$(basename "${file%.md}.html")"
+
             if file "$file" | grep -q UTF-16; then
-              iconv -f utf-16 -t utf-8 "$file" | pandoc -f markdown -t html -o "${file%.md}.html"
+              iconv -f utf-16 -t utf-8 "$file" | pandoc -f markdown -t html -o "$out"
             else
-              pandoc "$file" -f markdown -t html -o "${file%.md}.html"
+              pandoc "$file" -f markdown -t html -o "$out"
             fi
           done
+
+          find docs/html -name "*.html" -exec git add {} +
 
 
       - name: Commit HTML
