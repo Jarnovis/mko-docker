@@ -1,0 +1,30 @@
+services:
+  github-runner1:
+    build: 
+      context: .
+      args: 
+        GITHUB_PAT: ${GITHUB_PAT}
+      
+    container_name: "github-runner1-${PROJECT}"
+    restart: unless-stopped 
+    environment:
+      RUNNER_URL: ${RUNNER_URL}
+      RUNNER_WORKDIR: /home/runner/_work
+      LABELS: self-hosted,Linux,X64,${PROJECT}
+      EPHEMERAL: 0
+      PROJECT: ${PROJECT}
+      GITHUB_PAT: ${GITHUB_PAT}
+      REPO_OWNER: ${REPO_OWNER}
+      REPO_NAME: ${REPO_NAME}
+      NUMBER: 1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - internal
+
+networks:
+  internal:
+
+volumes:
+  gh-pages-data:
+  runner-data:

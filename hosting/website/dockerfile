@@ -1,0 +1,13 @@
+FROM pandoc/core:latest
+
+WORKDIR /app
+
+COPY docs /app/docs
+
+RUN mkdir -p /app/docs/html
+
+CMD find /app/docs -name "*.md" -print0 | \
+    while IFS= read -r -d '' file; do \
+      out="/app/docs/html/$(basename "${file%.md}.html")"; \
+      pandoc "$file" -f markdown -t html -s -o "$out"; \
+    done
