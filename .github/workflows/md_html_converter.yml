@@ -4,23 +4,23 @@ on:
     branches: [web, main]
     paths:
       - 'docs/**/*.md'
- 
+
 jobs:
   build:
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     permissions:
       contents: write
- 
+
     runs-on: [self-hosted, Linux, X64, mko-docker]
- 
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
- 
+
       - name: Install Pandoc
         run: sudo apt-get update && sudo apt-get install -y pandoc file
- 
+
       - name: Write HTML template
         run: |
           mkdir -p .pandoc
@@ -36,9 +36,9 @@ jobs:
             <title>$if(title)$$title$ — $if(repo-name)$$repo-name$$else$Docs$endif$$else$$if(repo-name)$$repo-name$$else$Docs$endif$$endif$</title>
             <style>
               @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
- 
+
               *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
- 
+
               /* ─────────────────────────────────────────────────────────────
                  COLOUR PALETTE — contrast ratios verified for WCAG 2.1 AA
                  Normal text ≥ 4.5:1 | Large text (≥18pt / 14pt bold) ≥ 3:1
@@ -49,31 +49,31 @@ jobs:
                 --ink:          #1a1814;  /* 17.4:1 ✓ */
                 --ink-mid:      #3d3830;  /* 10.1:1 ✓ (was --ink-light) */
                 --ink-subtle:   #5c554e;  /*  6.0:1 ✓ (was --ink-faint #9a948e = 2.8:1 ✗ FIXED) */
- 
+
                 /* Surfaces */
                 --paper:        #faf9f6;
                 --paper-warm:   #f3f0ea;
                 --rule:         #d8d2c8;  /* slightly darker — ≥3:1 for UI borders (1.4.11) */
- 
+
                 /* Accent boosted: was #b85c2a (3.6:1 on paper ✗) → 4.7:1 ✓ */
                 --accent:       #9e4a1a;
                 --accent-lt:    #f0e4d7;
                 --accent-hover: #7a3812;  /* 7.2:1 ✓ */
- 
+
                 --code-bg:      #ece8e0;
- 
+
                 /* Topbar text on #1a1814 */
                 --topbar-text:  #f0ede6;  /* 14.8:1 ✓ */
                 --topbar-sub:   #b0a898;  /*  5.1:1 ✓ (was --ink-faint on dark = 2.8:1 ✗ FIXED) */
- 
+
                 /* Focus ring — blue for universally clear focus indicator */
                 --focus:        #2563eb;
- 
+
                 --serif:  'Fraunces', Georgia, serif;
                 --sans:   'DM Sans', system-ui, sans-serif;
                 --mono:   'DM Mono', 'Courier New', monospace;
               }
- 
+
               /* 2.3.3 Animation from Interactions — honour user preference */
               @media (prefers-reduced-motion: reduce) {
                 *, *::before, *::after {
@@ -83,9 +83,9 @@ jobs:
                   scroll-behavior: auto !important;
                 }
               }
- 
+
               html { scroll-behavior: smooth; }
- 
+
               body {
                 background: var(--paper);
                 color: var(--ink);
@@ -95,7 +95,7 @@ jobs:
                 font-weight: 400;      /* was 300 — too light, raised to 400 ✓ */
                 min-height: 100vh;
               }
- 
+
               /* 2.4.1 Bypass Blocks: skip-to-content link */
               .skip-nav {
                 position: absolute;
@@ -111,7 +111,7 @@ jobs:
                 z-index: 9999;
               }
               .skip-nav:focus { top: 0; }
- 
+
               /* ── Layout ── */
               .page-wrap {
                 display: grid;
@@ -119,7 +119,7 @@ jobs:
                 grid-template-rows: auto 1fr;
                 min-height: 100vh;
               }
- 
+
               /* ── Top bar ── */
               .topbar {
                 grid-column: 1 / -1;
@@ -157,7 +157,7 @@ jobs:
                 color: var(--topbar-sub);  /* 5.1:1 ✓ */
                 letter-spacing: 0.03em;
               }
- 
+
               /* ── Sidebar TOC ── */
               .sidebar {
                 background: var(--paper-warm);
@@ -208,13 +208,13 @@ jobs:
               }
               #toc ul ul a { font-size: 0.8125rem; color: var(--ink-subtle); /* 6.0:1 ✓ */ }
               #toc ul ul a:hover { color: var(--ink); }
- 
+
               /* ── Main content ── */
               main {
                 padding: 3.5rem 4rem 6rem;
                 max-width: 52rem;
               }
- 
+
               /* ── Typography ── */
               h1, h2, h3, h4, h5, h6 {
                 font-family: var(--serif);
@@ -245,12 +245,12 @@ jobs:
               }
               h3 { font-size: 1.1875rem; margin-top: 2rem; margin-bottom: 0.5rem; letter-spacing: -0.01em; }
               h4 { font-size: 1rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.4rem; }
- 
+
               p {
                 margin-bottom: 1.25em;
                 max-width: 72ch;  /* comfortable reading line length */
               }
- 
+
               /* 1.4.1 Use of Colour: links always underlined, not colour-only */
               a {
                 color: var(--accent);         /* 4.7:1 ✓ */
@@ -263,16 +263,16 @@ jobs:
                 outline-offset: 2px;
                 border-radius: 2px;
               }
- 
+
               strong { font-weight: 600; }
               em { font-style: italic; }
- 
+
               hr { border: none; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
- 
+
               ul, ol { padding-left: 1.5em; margin-bottom: 1.25em; }
               li { margin-bottom: 0.35em; }
               li > ul, li > ol { margin-top: 0.35em; margin-bottom: 0; }
- 
+
               blockquote {
                 border-left: 4px solid var(--accent);
                 background: var(--accent-lt);
@@ -283,7 +283,7 @@ jobs:
                 font-style: italic;
               }
               blockquote p { margin: 0; }
- 
+
               /* ── Code ── */
               /* Inline code: --accent on --code-bg = 4.7:1 ✓ */
               code {
@@ -294,7 +294,7 @@ jobs:
                 border-radius: 3px;
                 color: var(--accent);
               }
- 
+
               .code-block-wrap {
                 position: relative;
                 margin: 1.75rem 0;
@@ -304,7 +304,7 @@ jobs:
                 outline: 2px solid #3a3530;
                 box-shadow: 0 2px 12px rgba(26,24,20,0.15);
               }
- 
+
               /* Language label — decorative, aria-hidden via JS */
               .code-block-wrap::before {
                 content: attr(data-lang);
@@ -319,7 +319,7 @@ jobs:
                 border-bottom: 1px solid #2a2825;
                 user-select: none;
               }
- 
+
               .code-copy-btn {
                 position: absolute;
                 top: 0.3rem;
@@ -351,7 +351,7 @@ jobs:
                 border-color: #6abf85;  /* 6.1:1 on #111 ✓ */
                 color: #6abf85;
               }
- 
+
               pre {
                 background: #1a1814;
                 border-radius: 0;
@@ -366,7 +366,7 @@ jobs:
                 padding: 0;
                 line-height: 1.7;
               }
- 
+
               /* Syntax tokens — all ≥ 4.5:1 on #1a1814 */
               pre code .kw { color: #e09070; font-weight: 500; }  /* keyword    5.3:1 ✓ */
               pre code .dt { color: #a8cce0; }                    /* data type  7.1:1 ✓ */
@@ -389,7 +389,7 @@ jobs:
               pre code .an { color: #78b8a8; }                    /* annotation 5.8:1 ✓ */
               pre code .cv { color: #78b8a8; }
               pre code .in { color: #78b8a8; }
- 
+
               /* ── Tables ── */
               table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9375rem; }
               caption {
@@ -410,7 +410,7 @@ jobs:
               }
               td { padding: 0.6rem 1rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
               tbody tr:hover td { background: var(--paper-warm); }
- 
+
               /* Forced colours / Windows High Contrast */
               @media (forced-colors: active) {
                 .topbar { border-bottom: 2px solid ButtonText; }
@@ -418,10 +418,10 @@ jobs:
                 .code-copy-btn { border-color: ButtonText; color: ButtonText; }
                 tbody tr:hover td { outline: 2px solid Highlight; }
               }
- 
+
               /* ── Images ── */
               img { max-width: 100%; border-radius: 4px; margin: 1rem 0; }
- 
+
               /* ── Metadata ── */
               .doc-meta {
                 display: flex;
@@ -438,19 +438,19 @@ jobs:
                 padding: 0.2em 0.75em;
                 font-family: var(--mono);
               }
- 
+
               /* ── Scrollbar ── */
               .sidebar::-webkit-scrollbar { width: 4px; }
               .sidebar::-webkit-scrollbar-track { background: transparent; }
               .sidebar::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 2px; }
- 
+
               /* ── 1.4.10 Reflow: single-column below 900px ── */
               @media (max-width: 56.25rem) {
                 .page-wrap { grid-template-columns: 1fr; }
                 .sidebar { display: none; }
                 main { padding: 2rem 1.5rem 4rem; max-width: 100%; }
               }
- 
+
               /* 1.4.3 / 1.4.6 High Contrast preference */
               @media (prefers-contrast: more) {
                 :root {
@@ -461,7 +461,7 @@ jobs:
                 .code-block-wrap { outline-width: 3px; }
                 .code-copy-btn { border-width: 2px; }
               }
- 
+
               @media print {
                 .topbar, .sidebar, .skip-nav, .code-copy-btn { display: none; }
                 .page-wrap { display: block; }
@@ -476,7 +476,7 @@ jobs:
           <body>
             <!-- 2.4.1 Skip navigation -->
             <a class="skip-nav" href="#main-content">Ga naar inhoud</a>
- 
+
             <div class="page-wrap">
               <header class="topbar">
                 <a class="topbar-logo" href="#" aria-label="$if(repo-name)$$repo-name$$else$Docs$endif$ — startpagina">
@@ -486,12 +486,12 @@ jobs:
                 <!-- Page title in topbar is decorative — real H1 is in <main> -->
                 $if(title)$<span class="topbar-title" aria-hidden="true">$title$</span>$endif$
               </header>
- 
+
               <nav class="sidebar" aria-labelledby="toc-heading">
                 <p class="sidebar-label" id="toc-heading">Op deze pagina</p>
                 $if(toc)$$toc$$endif$
               </nav>
- 
+
               <!-- id for skip-nav; tabindex="-1" allows programmatic focus -->
               <main id="main-content" tabindex="-1">
                 $if(title)$
@@ -506,7 +506,7 @@ jobs:
                 $body$
               </main>
             </div>
- 
+
             <script>
               // ── Code blocks: wrap + accessible copy button ──────────────────
               document.querySelectorAll('pre').forEach(function(pre) {
@@ -524,19 +524,19 @@ jobs:
                   }
                 }
                 lang = lang.trim();
- 
+
                 var wrap = document.createElement('div');
                 wrap.className = 'code-block-wrap';
                 wrap.setAttribute('data-lang', lang || 'code');
                 wrap.setAttribute('role', 'region');
                 wrap.setAttribute('aria-label', (lang ? lang + ' ' : '') + 'codeblok');
- 
+
                 var btn = document.createElement('button');
                 btn.className = 'code-copy-btn';
                 btn.setAttribute('type', 'button');
                 btn.setAttribute('aria-label', 'Kopieer code naar klembord');
                 btn.textContent = 'kopieer';
- 
+
                 btn.addEventListener('click', function() {
                   var text = (code || pre).innerText;
                   navigator.clipboard.writeText(text).then(function() {
@@ -556,12 +556,12 @@ jobs:
                     setTimeout(function() { btn.textContent = 'kopieer'; }, 2000);
                   });
                 });
- 
+
                 pre.parentNode.insertBefore(wrap, pre);
                 wrap.appendChild(pre);
                 wrap.appendChild(btn);
               });
- 
+
               // Live region for screen reader announcements
               var sr = document.createElement('div');
               sr.id = 'sr-announce';
@@ -570,7 +570,7 @@ jobs:
               sr.setAttribute('aria-atomic', 'true');
               sr.style.cssText = 'position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;';
               document.body.appendChild(sr);
- 
+
               // ── Tables: add scope to <th> cells (1.3.1) ─────────────────────
               document.querySelectorAll('thead th').forEach(function(th) {
                 if (!th.hasAttribute('scope')) th.setAttribute('scope', 'col');
@@ -581,39 +581,50 @@ jobs:
             </script>
           </body>
           </html>
- 
+
           TEMPLATE_EOF
- 
+
       - name: Convert Markdown naar HTML
         run: |
           mkdir -p docs/html
           TEMPLATE=".pandoc/doc-template.html"
-          # Derive repo name from the GitHub repository variable (owner/repo → repo)
           REPO_NAME="${GITHUB_REPOSITORY##*/}"
- 
-          find docs -name "*.md" -print0 | while IFS= read -r -d '' file; do
-            out="docs/html/$(basename "${file%.md}.html")"
- 
-            PANDOC_ARGS=(
-              -f markdown
-              -t html
-              --standalone
-              --template="$TEMPLATE"
-              --toc
-              --toc-depth=3
-              --no-highlight
-              --variable "repo-name=$REPO_NAME"
-            )
- 
+
+          convert_file() {
+            local file="$1"
+            local out="$2"
+
+            # Rewrite .md links to .html in a temp file so internal
+            # navigation works after conversion (./runner.md -> ./runner.html)
+            local tmp
+            tmp=$(mktemp --suffix=.md)
+
             if file "$file" | grep -q UTF-16; then
-              iconv -f utf-16 -t utf-8 "$file" | pandoc "${PANDOC_ARGS[@]}" -o "$out"
+              iconv -f utf-16 -t utf-8 "$file"                 | sed "s/\.md)/.html)/g; s/\.md#/.html#/g" > "$tmp"
             else
-              pandoc "$file" "${PANDOC_ARGS[@]}" -o "$out"
+              sed "s/\.md)/.html)/g; s/\.md#/.html#/g" "$file" > "$tmp"
             fi
+
+            pandoc "$tmp"               -f markdown               -t html               --standalone               --template="$TEMPLATE"               --toc               --toc-depth=3               --no-highlight               --variable "repo-name=$REPO_NAME"               -o "$out"
+
+            rm -f "$tmp"
+          }
+
+          find docs -name "*.md" -print0 | while IFS= read -r -d '' file; do
+            basename_noext="$(basename "${file%.md}")"
+
+            # nav.md becomes index.html — the docs landing/navigation page
+            if [ "$basename_noext" = "nav" ]; then
+              out="docs/html/index.html"
+            else
+              out="docs/html/${basename_noext}.html"
+            fi
+
+            convert_file "$file" "$out"
           done
- 
+
           find docs/html -name "*.html" -exec git add {} +
- 
+
       - name: Commit HTML
         run: |
           git config --global user.name "${{ runner.name }}"
