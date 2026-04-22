@@ -1,0 +1,16 @@
+services:
+  builder:
+    build:
+      context: ../..
+      dockerfile: hosting/website/Dockerfile
+    volumes:
+      - ../../docs:/app/docs
+
+  preview:
+    image: nginx:alpine
+    ports:
+      - "0:80"
+    volumes:
+      - ../../docs/html:/usr/share/nginx/html:ro
+    depends_on:
+      - builder
