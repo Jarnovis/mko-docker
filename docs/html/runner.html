@@ -1,511 +1,782 @@
-<h1 id="docker-runner-hosten">Docker runner hosten</h1>
-<h2 id="wat-is-een-runner">Wat is een runner?</h2>
-<p>Voor developer gebruik is het toepasselijk om (in het geval van GitHub) een actionsrunner te gebruiken. In deze runner worden .yml files gedraaid die getriggerd worden door acties op geselecteerde branches.</p>
-<p>Bij GitHub kun je runners huren. Deze runners worden aan de eind van de maand in kosten gebracht en verschillen tussen per model. De kosten zijn voor de gebruikte minuten van runner. Oftewel als er geen workflow draaiende is, worden er geen kosten in kaart gebracht.</p>
-<p>Voor runners worden er voor publieke repositories geen kosten in kaart gebracht, zodat de GitHub community beschikbaar wordt voor publieke doeleindes.</p>
-<p>GitHub heeft abonementen, waardoor de kosten van runners minder worden. Er zijn drie verschillende soorten abonnementen waar gebruik gemaakt van kunnen worden. Deze gratis minuten gelden voor de self-hosted runners of de ‘gratis’ runners van GitHub.</p>
-<table>
-<colgroup>
-<col style="width: 19%" />
-<col style="width: 19%" />
-<col style="width: 19%" />
-<col style="width: 42%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Item</th>
-<th>Free</th>
-<th>Team</th>
-<th>Enterpise</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Kosten</td>
-<td>$0 USD per user/month</td>
-<td>$4 USD per user/month</td>
-<td>$21 USD per user/month</td>
-</tr>
-<tr class="even">
-<td>GitHub Actions</td>
-<td>2,000 minutes/month (Free for public repositories)</td>
-<td>3,000 minutes/month (Free for public repositories)</td>
-<td>50,000 minutes/month (Free for public repositories)</td>
-</tr>
-</tbody>
-</table>
-<h2 id="kosten-runners">Kosten runners</h2>
-<h3 id="linux">Linux</h3>
-<table>
-<thead>
-<tr class="header">
-<th>Hardware</th>
-<th>Core size</th>
-<th>Prijs / minuut</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>x64</td>
-<td>1</td>
-<td>$0.002</td>
-</tr>
-<tr class="even">
-<td>x64</td>
-<td>2</td>
-<td>$0.006</td>
-</tr>
-<tr class="odd">
-<td>x64</td>
-<td>4</td>
-<td>$0.012</td>
-</tr>
-<tr class="even">
-<td>x64</td>
-<td>8</td>
-<td>$0.022</td>
-</tr>
-<tr class="odd">
-<td>x64</td>
-<td>16</td>
-<td>$0.042</td>
-</tr>
-<tr class="even">
-<td>x64</td>
-<td>32</td>
-<td>$0.082</td>
-</tr>
-<tr class="odd">
-<td>x64</td>
-<td>64</td>
-<td>$0.162</td>
-</tr>
-<tr class="even">
-<td>x64</td>
-<td>96</td>
-<td>$0.252</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr class="header">
-<th>Hardware</th>
-<th>Core size</th>
-<th>Prijs / minuut</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>ARM64</td>
-<td>2</td>
-<td>$0.005</td>
-</tr>
-<tr class="even">
-<td>ARM64</td>
-<td>4</td>
-<td>$0.008</td>
-</tr>
-<tr class="odd">
-<td>ARM64</td>
-<td>8</td>
-<td>$0.014</td>
-</tr>
-<tr class="even">
-<td>ARM64</td>
-<td>16</td>
-<td>$0.026</td>
-</tr>
-<tr class="odd">
-<td>ARM64</td>
-<td>32</td>
-<td>$0.050</td>
-</tr>
-<tr class="even">
-<td>ARM64</td>
-<td>64</td>
-<td>$0.98</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr class="header">
-<th>Hardware</th>
-<th>Core size</th>
-<th>Prijs / minuut</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>GPU-powerd</td>
-<td>4</td>
-<td>$0.052</td>
-</tr>
-</tbody>
-</table>
-<h3 id="windows">Windows</h3>
-<table>
-<thead>
-<tr class="header">
-<th>Hardware</th>
-<th>Core size</th>
-<th>Prijs / minuut</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>x64</td>
-<td>Server 2</td>
-<td>$0.010</td>
-</tr>
-<tr class="even">
-<td>x64</td>
-<td>Desktop 4</td>
-<td>$0.022</td>
-</tr>
-<tr class="odd">
-<td>x64</td>
-<td>Server 8</td>
-<td>$0.042</td>
-</tr>
-<tr class="even">
-<td>x64</td>
-<td>Server 16</td>
-<td>$0.082</td>
-</tr>
-<tr class="odd">
-<td>x64</td>
-<td>Server 32</td>
-<td>$0.162</td>
-</tr>
-<tr class="even">
-<td>x64</td>
-<td>Server 64</td>
-<td>$0.322</td>
-</tr>
-<tr class="odd">
-<td>x64</td>
-<td>Server 96</td>
-<td>$0.552</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr class="header">
-<th>Hardware</th>
-<th>Core size</th>
-<th>Prijs / minuut</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>ARM64</td>
-<td>Desktop 2</td>
-<td>$0.008</td>
-</tr>
-<tr class="even">
-<td>ARM64</td>
-<td>Desktop 4</td>
-<td>$0.014</td>
-</tr>
-<tr class="odd">
-<td>ARM64</td>
-<td>Desktop 8</td>
-<td>$0.026</td>
-</tr>
-<tr class="even">
-<td>ARM64</td>
-<td>Desktop 16</td>
-<td>$0.050</td>
-</tr>
-<tr class="odd">
-<td>ARM64</td>
-<td>Desktop 32</td>
-<td>$0.098</td>
-</tr>
-<tr class="even">
-<td>ARM64</td>
-<td>Desktop 64</td>
-<td>$0.194</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr class="header">
-<th>Hardware</th>
-<th>Core size</th>
-<th>Prijs / minuut</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>GPU-powerd</td>
-<td>4</td>
-<td>$0.102</td>
-</tr>
-</tbody>
-</table>
-<h3 id="macos">macOS</h3>
-<table>
-<thead>
-<tr class="header">
-<th>Hardware</th>
-<th>Core size</th>
-<th>Prijs / minuut</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>x64</td>
-<td>4 (Intel)</td>
-<td>$0.062</td>
-</tr>
-<tr class="even">
-<td>x64</td>
-<td>12 (Intel)</td>
-<td>$0.077</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr class="header">
-<th>Hardware</th>
-<th>Core size</th>
-<th>Prijs / minuut</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>ARM64</td>
-<td>3 (M1)</td>
-<td>$0.062</td>
-</tr>
-<tr class="even">
-<td>ARM64</td>
-<td>5 (M2 Pro)</td>
-<td>$0.102</td>
-</tr>
-</tbody>
-</table>
-<h3 id="self-hosted">Self hosted</h3>
-<p>Sinds 1 Januarri 2026 worden er kosten in kaart gebracht voor het hosten van een eigen runner. Deze kosten bedragen <strong>$0.002 per minuut</strong>, onafhankelijk welk soort model je gebruikt.</p>
-<h2 id="self-hosted-runner-hosten">Self hosted runner hosten</h2>
-<p>Op een device kan je standaard <strong>één</strong> runner hosten via de terminal. Het nadeel hiervan is dat deze terminal altijd open moet staan en dat je er maar één runner kan draaien, wat vervelend is als je bezig bent met meerdere projecten.</p>
-<p>De oplossing voor dit probleem is Docker. Hiermee kan je meerdere runners voor één of meerdere GitHub repositories gebruiken. Tijdens dit project wordt er uitleg gegeven over hoe je één of meerdere runners binnen een project kan gebruiken.</p>
-<h3 id="runnen-met-docker">Runnen met Docker</h3>
-<h4 id="docker-compose.yml">Docker-compose.yml</h4>
-<p>Docker-compose.yml zorgt ervoor dat docker alle containers, netwerken en variabelen instelt.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode yml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">services</span><span class="kw">:</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="at">  </span><span class="fu">github-runner1</span><span class="kw">:</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="at">    </span><span class="fu">build</span><span class="kw">:</span><span class="at"> </span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="at">      </span><span class="fu">context</span><span class="kw">:</span><span class="at"> .</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="at">      </span><span class="fu">args</span><span class="kw">:</span><span class="at"> </span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a><span class="at">        </span><span class="fu">GITHUB_PAT</span><span class="kw">:</span><span class="at"> ${GITHUB_PAT}</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="at">      </span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a><span class="at">    </span><span class="fu">container_name</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;github-runner1-${PROJECT}&quot;</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> unless-stopped </span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a><span class="at">      </span><span class="fu">RUNNER_URL</span><span class="kw">:</span><span class="at"> ${RUNNER_URL}</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a><span class="at">      </span><span class="fu">RUNNER_WORKDIR</span><span class="kw">:</span><span class="at"> /home/runner/_work</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a><span class="at">      </span><span class="fu">LABELS</span><span class="kw">:</span><span class="at"> self-hosted,Linux,X64,${PROJECT}</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a><span class="at">      </span><span class="fu">EPHEMERAL</span><span class="kw">:</span><span class="at"> </span><span class="dv">0</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a><span class="at">      </span><span class="fu">PROJECT</span><span class="kw">:</span><span class="at"> ${PROJECT}</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a><span class="at">      </span><span class="fu">GITHUB_PAT</span><span class="kw">:</span><span class="at"> ${GITHUB_PAT}</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a><span class="at">      </span><span class="fu">REPO_OWNER</span><span class="kw">:</span><span class="at"> ${REPO_OWNER}</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true"></a><span class="at">      </span><span class="fu">REPO_NAME</span><span class="kw">:</span><span class="at"> ${REPO_NAME}</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true"></a><span class="at">      </span><span class="fu">NUMBER</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true"></a><span class="at">    </span><span class="fu">volumes</span><span class="kw">:</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true"></a><span class="at">      </span><span class="kw">-</span><span class="at"> /var/run/docker.sock:/var/run/docker.sock</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true"></a><span class="at">      </span><span class="kw">-</span><span class="at"> internal</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true"></a></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true"></a><span class="fu">networks</span><span class="kw">:</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true"></a><span class="at">  </span><span class="fu">internal</span><span class="kw">:</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true"></a></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true"></a><span class="fu">volumes</span><span class="kw">:</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true"></a><span class="at">  </span><span class="fu">gh-pages-data</span><span class="kw">:</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true"></a><span class="at">  </span><span class="fu">runner-data</span><span class="kw">:</span></span></code></pre></div>
-<h4 id="dockerfile">Dockerfile</h4>
-<div class="sourceCode" id="cb2"><pre class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="co"># Waar de runner op draait</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="kw">FROM</span> ubuntu:22.04</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="co"># Default antwoorden worden door gegeven op vragen</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="kw">ENV</span> DEBIAN_FRONTEND=noninteractive</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a><span class="co"># GitHub Personal Acces Token (PAT) ophalen uit de .env file</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a><span class="kw">ARG</span> GITHUB_PAT</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a><span class="kw">ENV</span> GITHUB_PAT=${GITHUB_PAT}</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a><span class="co"># Tijdszone instellen</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a><span class="kw">ENV</span> TZ=Europe/Amsterdam</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a><span class="kw">RUN</span> ln -snf /usr/share/zoneinfo/$TZ /etc/localtime &amp;&amp; echo $TZ &gt; /etc/timezone</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a><span class="co"># Standaard installaties voor het opzetten van de runner</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a><span class="kw">RUN</span> apt-get update &amp;&amp; apt-get install -y \</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>    sudo \</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a>    curl \</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a>    jq \</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a>    git \</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true"></a>    ca-certificates \</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true"></a>    gnupg \</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true"></a>    lsb-release \</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true"></a>    libicu70 &amp;&amp; \</span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true"></a>    rm -rf /var/lib/apt/lists/*</span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true"></a></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true"></a><span class="co"># Een non-root gebruiker &#39;runner&#39; aanmaken met sudo rechten</span></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true"></a><span class="kw">RUN</span> useradd -m runner &amp;&amp; echo <span class="st">&quot;runner ALL=(ALL) NOPASSWD:ALL&quot;</span> &gt;&gt; /etc/sudoers</span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true"></a></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true"></a><span class="co"># Werkmap bepalen</span></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true"></a><span class="kw">WORKDIR</span> /home/runner</span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true"></a></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true"></a><span class="co"># Code om de runner automatisch te laten registreren </span></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true"></a><span class="kw">RUN</span> ARCH=$(uname -m) &amp;&amp; \</span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true"></a>  <span class="co"># Type architectuur vaststellen </span></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true"></a>    case <span class="st">&quot;$ARCH&quot;</span> in \</span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true"></a>      x86_64) ARCH=<span class="st">&quot;x64&quot;</span> ;; \</span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true"></a>      aarch64|arm64) ARCH=<span class="st">&quot;arm64&quot;</span> ;; \</span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true"></a>      armv7l|armhf) ARCH=<span class="st">&quot;arm&quot;</span> ;; \</span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true"></a>      *) echo <span class="st">&quot;Unsupported architecture: $ARCH&quot;</span>; exit 1 ;; \</span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true"></a>    esac &amp;&amp; \</span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true"></a>    echo <span class="st">&quot;Detected architecture: $ARCH&quot;</span> &amp;&amp; \</span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true"></a>    <span class="co"># Download URL voor runner vast stellen</span></span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true"></a>    RUNNER_URL=$(curl -s \</span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true"></a>      -H <span class="st">&quot;Authorization: token ${GITHUB_PAT}&quot;</span> \</span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true"></a>      https://api.github.com/repos/actions/runner/releases/latest \</span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true"></a>      | jq -r <span class="st">&quot;.assets[] | select(.name | contains(\&quot;</span>linux-$ARCH\<span class="st">&quot;) and endswith(\&quot;</span>.tar.gz\<span class="st">&quot;)) | .browser_download_url&quot;</span>) &amp;&amp; \</span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true"></a>    echo <span class="st">&quot;Downloading: $RUNNER_URL&quot;</span> &amp;&amp; \</span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true"></a>    <span class="co"># Runner downloaden (Gecomprimeerd bestand)</span></span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true"></a>    curl -L -H <span class="st">&quot;Authorization: token ${GITHUB_PAT}&quot;</span> \</span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true"></a>      -o actions-runner.tar.gz <span class="st">&quot;$RUNNER_URL&quot;</span> &amp;&amp; \</span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true"></a>    <span class="co"># Gecomprimeerd bestand uitpakken en verwijderen</span></span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true"></a>    tar xzf actions-runner.tar.gz &amp;&amp; rm actions-runner.tar.gz</span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true"></a></span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true"></a><span class="co"># Vanaf hier alle commando&#39;s uitvoeren als de &#39;runner&#39; gebruiker</span></span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true"></a><span class="kw">USER</span> runner</span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true"></a></span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true"></a><span class="co"># Zorgen dat het script uitvoerbaar is en eventuele Windows-regeleinden (CRLF) verwijderen</span></span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true"></a><span class="kw">COPY</span> --chown=runner:runner entrypoint.sh /home/runner/entrypoint.sh</span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true"></a></span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true"></a><span class="kw">RUN</span> sudo apt-get update &amp;&amp; \</span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true"></a>    sudo apt-get install -y sed &amp;&amp; \</span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true"></a>    sed -i <span class="st">&#39;s/\r//g&#39;</span> /home/runner/entrypoint.sh &amp;&amp; \</span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true"></a>    chmod +x /home/runner/entrypoint.sh</span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true"></a></span>
-<span id="cb2-66"><a href="#cb2-66" aria-hidden="true"></a><span class="kw">ENTRYPOINT</span> [<span class="st">&quot;/home/runner/entrypoint.sh&quot;</span>]</span></code></pre></div>
-<h4 id="entrypoint.sh">entrypoint.sh</h4>
-<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="kw">set</span> <span class="ex">-e</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="co"># Tijdszone goed zetten voor shellscript</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="bu">export</span> <span class="va">TZ=${TZ:-</span>Europe/Amsterdam<span class="va">}</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a><span class="fu">cleanup()</span> <span class="kw">{</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>  <span class="bu">echo</span> <span class="st">&quot;Runner wordt afgemeld bij GitHub...&quot;</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a>  <span class="va">REMOVE_TOKEN=$(</span><span class="ex">curl</span> -sX POST <span class="kw">\</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a>      <span class="ex">-H</span> <span class="st">&quot;Authorization: token </span><span class="va">${GITHUB_PAT}</span><span class="st">&quot;</span> <span class="kw">\</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true"></a>      <span class="st">&quot;https://api.github.com/repos/</span><span class="va">${REPO_OWNER}</span><span class="st">/</span><span class="va">${REPO_NAME}</span><span class="st">/actions/runners/remove-token&quot;</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a> <span class="kw">|</span> <span class="ex">jq</span> -r .token<span class="va">)</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true"></a>  <span class="kw">if</span><span class="bu"> [</span> <span class="ot">-z</span> <span class="st">&quot;</span><span class="va">$REMOVE_TOKEN</span><span class="st">&quot;</span><span class="bu"> ]</span>; <span class="kw">then</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true"></a>    <span class="bu">echo</span> <span class="st">&quot;Kon geen removal-token ophalen (handmatig verwijderen).&quot;</span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true"></a>    <span class="bu">return</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true"></a>  <span class="kw">fi</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true"></a></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true"></a>  <span class="ex">./config.sh</span> remove --unattended --token <span class="st">&quot;</span><span class="va">$REMOVE_TOKEN</span><span class="st">&quot;</span> <span class="kw">||</span> <span class="fu">true</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true"></a><span class="kw">}</span></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true"></a></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true"></a><span class="bu">trap</span> cleanup EXIT SIGINT SIGTERM</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true"></a></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true"></a><span class="va">RUNNER_TOKEN=$(</span><span class="ex">curl</span> -sX POST <span class="kw">\</span></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true"></a>  <span class="ex">-H</span> <span class="st">&quot;Authorization: token </span><span class="va">${GITHUB_PAT}</span><span class="st">&quot;</span> <span class="kw">\</span></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true"></a>  <span class="ex">https</span>://api.github.com/repos/<span class="va">${REPO_OWNER}</span>/<span class="va">${REPO_NAME}</span>/actions/runners/registration-token <span class="kw">\</span></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true"></a>  <span class="kw">|</span> <span class="ex">jq</span> -r .token<span class="va">)</span></span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true"></a></span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true"></a><span class="kw">if</span><span class="bu"> [</span> <span class="ot">-z</span> <span class="st">&quot;</span><span class="va">$RUNNER_TOKEN</span><span class="st">&quot;</span><span class="bu"> ]</span> <span class="kw">||</span><span class="bu"> [</span> <span class="ot">-z</span> <span class="st">&quot;</span><span class="va">$RUNNER_URL</span><span class="st">&quot;</span><span class="bu"> ]</span>; <span class="kw">then</span></span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true"></a>  <span class="bu">echo</span> <span class="st">&quot;ERROR: RUNNER_TOKEN en RUNNER_URL moeten ingesteld zijn.&quot;</span></span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true"></a>  <span class="bu">exit</span> 1</span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true"></a><span class="kw">fi</span></span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true"></a></span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true"></a><span class="va">UTC_TS=$(</span><span class="fu">date</span> -u <span class="st">&#39;+D%dM%mY%Y H%HM%MS%S UTC&#39;</span><span class="va">)</span></span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true"></a><span class="va">RUNNER_NAME=</span><span class="st">&quot;</span><span class="va">${REPO_NAME}</span><span class="st">-</span><span class="va">${NUMBER}</span><span class="st">-</span><span class="va">${UTC_TS}</span><span class="st">&quot;</span></span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true"></a></span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;==========================================&quot;</span></span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;Project: </span><span class="va">$REPO_NAME</span><span class="st">&quot;</span></span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;Runner naam: </span><span class="va">$RUNNER_NAME</span><span class="st">&quot;</span></span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;Runner URL: </span><span class="va">$RUNNER_URL</span><span class="st">&quot;</span></span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;==========================================&quot;</span></span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true"></a></span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;Controleer of runner al geconfigureerd is...&quot;</span></span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true"></a><span class="kw">if</span><span class="bu"> [</span> <span class="ot">!</span> <span class="ot">-f</span> .runner<span class="bu"> ]</span>; <span class="kw">then</span></span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true"></a>  <span class="bu">echo</span> <span class="st">&quot;Configureren runner </span><span class="va">$RUNNER_NAME</span><span class="st"> voor </span><span class="va">$RUNNER_URL</span><span class="st">&quot;</span></span>
-<span id="cb3-47"><a href="#cb3-47" aria-hidden="true"></a>  </span>
-<span id="cb3-48"><a href="#cb3-48" aria-hidden="true"></a>  <span class="kw">if</span><span class="bu"> [</span> <span class="st">&quot;</span><span class="va">$EPHEMERAL</span><span class="st">&quot;</span> <span class="ot">=</span> <span class="st">&quot;1&quot;</span><span class="bu"> ]</span>; <span class="kw">then</span></span>
-<span id="cb3-49"><a href="#cb3-49" aria-hidden="true"></a>    <span class="va">EXTRA_ARGS=</span><span class="st">&quot;--ephemeral&quot;</span></span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true"></a>  <span class="kw">fi</span></span>
-<span id="cb3-51"><a href="#cb3-51" aria-hidden="true"></a></span>
-<span id="cb3-52"><a href="#cb3-52" aria-hidden="true"></a>  <span class="ex">./config.sh</span> <span class="kw">\</span></span>
-<span id="cb3-53"><a href="#cb3-53" aria-hidden="true"></a>    <span class="ex">--url</span> <span class="st">&quot;</span><span class="va">$RUNNER_URL</span><span class="st">&quot;</span> <span class="kw">\</span></span>
-<span id="cb3-54"><a href="#cb3-54" aria-hidden="true"></a>    <span class="ex">--token</span> <span class="st">&quot;</span><span class="va">$RUNNER_TOKEN</span><span class="st">&quot;</span> <span class="kw">\</span></span>
-<span id="cb3-55"><a href="#cb3-55" aria-hidden="true"></a>    <span class="ex">--name</span> <span class="st">&quot;</span><span class="va">$RUNNER_NAME</span><span class="st">&quot;</span> <span class="kw">\</span></span>
-<span id="cb3-56"><a href="#cb3-56" aria-hidden="true"></a>    <span class="ex">--work</span> _work <span class="kw">\</span></span>
-<span id="cb3-57"><a href="#cb3-57" aria-hidden="true"></a>    <span class="ex">--labels</span> <span class="st">&quot;</span><span class="va">$LABELS</span><span class="st">&quot;</span> <span class="kw">\</span></span>
-<span id="cb3-58"><a href="#cb3-58" aria-hidden="true"></a>    <span class="ex">--unattended</span> <span class="kw">\</span></span>
-<span id="cb3-59"><a href="#cb3-59" aria-hidden="true"></a>    <span class="va">$EXTRA_ARGS</span></span>
-<span id="cb3-60"><a href="#cb3-60" aria-hidden="true"></a><span class="kw">else</span></span>
-<span id="cb3-61"><a href="#cb3-61" aria-hidden="true"></a>  <span class="bu">echo</span> <span class="st">&quot;Runner al geconfigureerd, sla config stap over.&quot;</span></span>
-<span id="cb3-62"><a href="#cb3-62" aria-hidden="true"></a><span class="kw">fi</span></span>
-<span id="cb3-63"><a href="#cb3-63" aria-hidden="true"></a></span>
-<span id="cb3-64"><a href="#cb3-64" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;==========================================&quot;</span></span>
-<span id="cb3-65"><a href="#cb3-65" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;Runner </span><span class="va">$RUNNER_NAME</span><span class="st"> gestart...&quot;</span></span>
-<span id="cb3-66"><a href="#cb3-66" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;==========================================&quot;</span></span>
-<span id="cb3-67"><a href="#cb3-67" aria-hidden="true"></a><span class="bu">exec</span> ./run.sh</span></code></pre></div>
-<h4 id="start_runner.sh">start_runner.sh</h4>
-<p>Start runner.sh is en script waardoor er geen gebruik gemaakt hoeft te worden van de Docker commants om de runner snel aan te zetten</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="kw">set</span> <span class="ex">-e</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$(</span><span class="fu">dirname</span> <span class="st">&quot;</span><span class="va">$0</span><span class="st">&quot;</span><span class="va">)</span><span class="st">&quot;</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="va">PROJECT=$(</span><span class="fu">basename</span> <span class="st">&quot;</span><span class="va">$(</span><span class="fu">dirname</span> <span class="st">&quot;</span><span class="va">$(</span><span class="fu">dirname</span> <span class="st">&quot;</span><span class="va">$PWD</span><span class="st">&quot;</span><span class="va">)</span><span class="st">&quot;</span><span class="va">)</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="fu">tr</span> <span class="st">&#39;[:upper:]&#39;</span> <span class="st">&#39;[:lower:]&#39;</span><span class="va">)</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a><span class="va">IMAGE_NAME=</span><span class="st">&quot;</span><span class="va">${PROJECT}</span><span class="st">-github-runner&quot;</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;--- Start runner voor project: </span><span class="va">$PROJECT</span><span class="st"> ---&quot;</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a><span class="co"># Controleer of image al bestaat — bouwen indien nodig</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a><span class="kw">if</span> ! <span class="ex">docker</span> image inspect <span class="st">&quot;</span><span class="va">$IMAGE_NAME</span><span class="st">:latest&quot;</span> <span class="op">&gt;</span>/dev/null <span class="op">2&gt;&amp;1</span><span class="kw">;</span> <span class="kw">then</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a>    <span class="bu">echo</span> <span class="st">&quot;Geen bestaande image gevonden — bouwen...&quot;</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a>    <span class="va">PROJECT=</span><span class="st">&quot;</span><span class="va">$PROJECT</span><span class="st">&quot;</span> <span class="ex">docker</span> compose -p <span class="st">&quot;</span><span class="va">$PROJECT</span><span class="st">&quot;</span> build --progress=plain</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a><span class="kw">else</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a>    <span class="bu">echo</span> <span class="st">&quot;Image </span><span class="va">$IMAGE_NAME</span><span class="st"> bestaat al.&quot;</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true"></a><span class="kw">fi</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true"></a></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true"></a><span class="co"># ontainers starten in de achtergrond</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;Containers starten...&quot;</span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true"></a><span class="va">PROJECT=</span><span class="st">&quot;</span><span class="va">$PROJECT</span><span class="st">&quot;</span> <span class="ex">docker</span> compose -p <span class="st">&quot;</span><span class="va">$PROJECT</span><span class="st">&quot;</span> up -d</span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true"></a></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true"></a><span class="co"># ogs streamen totdat de verbinding is bevestigd</span></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;Wachten op verbinding met GitHub...&quot;</span></span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true"></a></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true"></a><span class="va">PROJECT=</span><span class="st">&quot;</span><span class="va">$PROJECT</span><span class="st">&quot;</span> <span class="ex">docker</span> compose -p <span class="st">&quot;</span><span class="va">$PROJECT</span><span class="st">&quot;</span> logs -f --no-log-prefix <span class="kw">|</span> <span class="fu">grep</span> -m 1 <span class="st">&quot;Connected to GitHub&quot;</span></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true"></a></span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true"></a><span class="bu">echo</span> -e <span class="st">&quot;\n--- Runner is succesvol verbonden met GitHub! ---&quot;</span></span></code></pre></div>
-<h4 id="stop_runner.sh">stop_runner.sh</h4>
-<p>Stop runner.sh is en script waardoor er geen gebruik gemaakt hoeft te worden van de Docker commants om de runner te laten deregistreren en te verwijderen</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="va">PROJECT=$(</span><span class="fu">basename</span> <span class="st">&quot;</span><span class="va">$(</span><span class="fu">dirname</span> <span class="st">&quot;</span><span class="va">$(</span><span class="fu">dirname</span> <span class="st">&quot;</span><span class="va">$PWD</span><span class="st">&quot;</span><span class="va">)</span><span class="st">&quot;</span><span class="va">)</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="fu">tr</span> <span class="st">&#39;[:upper:]&#39;</span> <span class="st">&#39;[:lower:]&#39;</span><span class="va">)</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;--- Stoppen en afmelden van runner project: </span><span class="va">$PROJECT</span><span class="st"> ---&quot;</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a><span class="va">PROJECT=</span><span class="st">&quot;</span><span class="va">$PROJECT</span><span class="st">&quot;</span> <span class="ex">docker</span> compose -p <span class="st">&quot;</span><span class="va">$PROJECT</span><span class="st">&quot;</span> logs -f --no-log-prefix <span class="kw">&amp;</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a><span class="va">LOGS_PID=$!</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a><span class="va">PROJECT=</span><span class="st">&quot;</span><span class="va">$PROJECT</span><span class="st">&quot;</span> <span class="ex">docker</span> compose -p <span class="st">&quot;</span><span class="va">$PROJECT</span><span class="st">&quot;</span> down --rmi local --remove-orphans</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a><span class="fu">sleep</span> 2</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a><span class="bu">kill</span> <span class="va">$LOGS_PID</span> <span class="op">2&gt;</span>/dev/null</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true"></a></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true"></a><span class="bu">echo</span> -e <span class="st">&quot;\n--- Runner is succesvol afgemeld en verwijderd! ---&quot;</span></span></code></pre></div>
+<!DOCTYPE html>
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="generator" content="pandoc" />
+  <title>Document</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:        #1a1814;
+      --ink-light:  #4a4540;
+      --ink-faint:  #9a948e;
+      --paper:      #faf9f6;
+      --paper-warm: #f3f0ea;
+      --rule:       #e5e0d8;
+      --accent:     #b85c2a;
+      --accent-lt:  #f0e4d7;
+      --code-bg:    #f0ede6;
+      --serif:      'Fraunces', Georgia, serif;
+      --sans:       'DM Sans', system-ui, sans-serif;
+      --mono:       'DM Mono', 'Courier New', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 17px;
+      line-height: 1.75;
+      font-weight: 300;
+      min-height: 100vh;
+    }
+
+    .page-wrap {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      grid-template-rows: auto 1fr;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      grid-column: 1 / -1;
+      background: var(--ink);
+      color: var(--paper);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0 2rem;
+      height: 56px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .topbar-logo {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--paper);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+    .topbar-logo span { color: var(--accent); }
+    .topbar-sep { flex: 1; }
+    .topbar-title {
+      font-size: 0.78rem;
+      font-weight: 400;
+      color: var(--ink-faint);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .sidebar {
+      background: var(--paper-warm);
+      border-right: 1px solid var(--rule);
+      padding: 2rem 1.25rem;
+      position: sticky;
+      top: 56px;
+      height: calc(100vh - 56px);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    .sidebar-label {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 0.75rem;
+      padding-left: 0.5rem;
+    }
+    #toc ul { list-style: none; }
+    #toc > ul { padding: 0; }
+    #toc ul ul { padding-left: 0.75rem; border-left: 1px solid var(--rule); margin-left: 0.5rem; }
+    #toc a {
+      display: block;
+      padding: 0.3rem 0.5rem;
+      font-size: 0.82rem;
+      color: var(--ink-light);
+      text-decoration: none;
+      border-radius: 3px;
+      line-height: 1.4;
+      transition: background 0.15s, color 0.15s;
+    }
+    #toc a:hover { background: var(--rule); color: var(--ink); }
+    #toc ul ul a { font-size: 0.78rem; color: var(--ink-faint); }
+    #toc ul ul a:hover { color: var(--ink); }
+
+    main {
+      padding: 3.5rem 4rem 6rem;
+      max-width: 820px;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--serif);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--ink);
+      scroll-margin-top: 72px;
+    }
+    h1 {
+      font-size: 2.8rem;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.4em;
+    }
+    h2 {
+      font-size: 1.65rem;
+      margin-top: 3rem;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1.5px solid var(--rule);
+      letter-spacing: -0.02em;
+    }
+    h3 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+    h4 { font-size: 1rem; margin-top: 1.5rem; margin-bottom: 0.4rem; }
+
+    p { margin-bottom: 1.2em; }
+
+    a { color: var(--accent); text-underline-offset: 3px; }
+    a:hover { color: var(--ink); }
+
+    strong { font-weight: 500; }
+    em { font-style: italic; }
+
+    hr { border: none; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
+
+    ul, ol { padding-left: 1.5em; margin-bottom: 1.2em; }
+    li { margin-bottom: 0.3em; }
+    li > ul, li > ol { margin-top: 0.3em; margin-bottom: 0; }
+
+    blockquote {
+      border-left: 3px solid var(--accent);
+      background: var(--accent-lt);
+      margin: 1.5rem 0;
+      padding: 1rem 1.25rem;
+      border-radius: 0 4px 4px 0;
+      color: var(--ink-light);
+      font-style: italic;
+    }
+    blockquote p { margin: 0; }
+
+    code {
+      font-family: var(--mono);
+      font-size: 0.84em;
+      background: var(--code-bg);
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      color: var(--accent);
+    }
+    pre {
+      background: var(--ink);
+      border-radius: 6px;
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+    }
+    pre code {
+      background: none;
+      color: #e8e3db;
+      font-size: 0.83rem;
+      padding: 0;
+      line-height: 1.65;
+    }
+
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+    thead { border-bottom: 2px solid var(--ink); }
+    th {
+      text-align: left;
+      font-weight: 500;
+      padding: 0.6rem 1rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+    }
+    td { padding: 0.6rem 1rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+    tbody tr:hover td { background: var(--paper-warm); }
+
+    img { max-width: 100%; border-radius: 4px; margin: 1rem 0; }
+
+    .doc-meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+      font-size: 0.8rem;
+      color: var(--ink-faint);
+    }
+    .doc-meta .pill {
+      background: var(--paper-warm);
+      border: 1px solid var(--rule);
+      border-radius: 20px;
+      padding: 0.2em 0.75em;
+      font-family: var(--mono);
+    }
+
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 2px; }
+
+    @media (max-width: 900px) {
+      .page-wrap { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      main { padding: 2rem 1.5rem 4rem; max-width: 100%; }
+    }
+    @media print {
+      .topbar, .sidebar { display: none; }
+      .page-wrap { display: block; }
+      main { padding: 0; max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrap">
+    <header class="topbar">
+      <a class="topbar-logo" href="#">Docs<span>.</span></a>
+      <span class="topbar-sep"></span>
+      
+    </header>
+
+    <nav class="sidebar" aria-label="Table of contents">
+      <div class="sidebar-label">On this page</div>
+      <ul>
+<li><a href="#docker-runner-hosten">Docker runner hosten</a>
+<ul>
+<li><a href="#wat-is-een-runner">Wat is een runner?</a></li>
+<li><a href="#kosten-runners">Kosten runners</a>
+<ul>
+<li><a href="#linux">Linux</a></li>
+<li><a href="#windows">Windows</a></li>
+<li><a href="#macos">macOS</a></li>
+<li><a href="#self-hosted">Self hosted</a></li>
+</ul></li>
+<li><a href="#self-hosted-runner-hosten">Self hosted runner hosten</a>
+<ul>
+<li><a href="#runnen-met-docker">Runnen met Docker</a></li>
+</ul></li>
+</ul></li>
+</ul>
+    </nav>
+
+    <main>
+            <h1 id="docker-runner-hosten">Docker runner hosten</h1>
+            <h2 id="wat-is-een-runner">Wat is een runner?</h2>
+            <p>Voor developer gebruik is het toepasselijk om (in het geval van GitHub) een actionsrunner te gebruiken. In deze runner worden .yml files gedraaid die getriggerd worden door acties op geselecteerde branches.</p>
+            <p>Bij GitHub kun je runners huren. Deze runners worden aan de eind van de maand in kosten gebracht en verschillen tussen per model. De kosten zijn voor de gebruikte minuten van runner. Oftewel als er geen workflow draaiende is, worden er geen kosten in kaart gebracht.</p>
+            <p>Voor runners worden er voor publieke repositories geen kosten in kaart gebracht, zodat de GitHub community beschikbaar wordt voor publieke doeleindes.</p>
+            <p>GitHub heeft abonementen, waardoor de kosten van runners minder worden. Er zijn drie verschillende soorten abonnementen waar gebruik gemaakt van kunnen worden. Deze gratis minuten gelden voor de self-hosted runners of de ‘gratis’ runners van GitHub.</p>
+            <table>
+            <colgroup>
+            <col style="width: 19%" />
+            <col style="width: 19%" />
+            <col style="width: 19%" />
+            <col style="width: 42%" />
+            </colgroup>
+            <thead>
+            <tr class="header">
+            <th>Item</th>
+            <th>Free</th>
+            <th>Team</th>
+            <th>Enterpise</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>Kosten</td>
+            <td>$0 USD per user/month</td>
+            <td>$4 USD per user/month</td>
+            <td>$21 USD per user/month</td>
+            </tr>
+            <tr class="even">
+            <td>GitHub Actions</td>
+            <td>2,000 minutes/month (Free for public repositories)</td>
+            <td>3,000 minutes/month (Free for public repositories)</td>
+            <td>50,000 minutes/month (Free for public repositories)</td>
+            </tr>
+            </tbody>
+            </table>
+            <h2 id="kosten-runners">Kosten runners</h2>
+            <h3 id="linux">Linux</h3>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>Hardware</th>
+            <th>Core size</th>
+            <th>Prijs / minuut</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>x64</td>
+            <td>1</td>
+            <td>$0.002</td>
+            </tr>
+            <tr class="even">
+            <td>x64</td>
+            <td>2</td>
+            <td>$0.006</td>
+            </tr>
+            <tr class="odd">
+            <td>x64</td>
+            <td>4</td>
+            <td>$0.012</td>
+            </tr>
+            <tr class="even">
+            <td>x64</td>
+            <td>8</td>
+            <td>$0.022</td>
+            </tr>
+            <tr class="odd">
+            <td>x64</td>
+            <td>16</td>
+            <td>$0.042</td>
+            </tr>
+            <tr class="even">
+            <td>x64</td>
+            <td>32</td>
+            <td>$0.082</td>
+            </tr>
+            <tr class="odd">
+            <td>x64</td>
+            <td>64</td>
+            <td>$0.162</td>
+            </tr>
+            <tr class="even">
+            <td>x64</td>
+            <td>96</td>
+            <td>$0.252</td>
+            </tr>
+            </tbody>
+            </table>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>Hardware</th>
+            <th>Core size</th>
+            <th>Prijs / minuut</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>ARM64</td>
+            <td>2</td>
+            <td>$0.005</td>
+            </tr>
+            <tr class="even">
+            <td>ARM64</td>
+            <td>4</td>
+            <td>$0.008</td>
+            </tr>
+            <tr class="odd">
+            <td>ARM64</td>
+            <td>8</td>
+            <td>$0.014</td>
+            </tr>
+            <tr class="even">
+            <td>ARM64</td>
+            <td>16</td>
+            <td>$0.026</td>
+            </tr>
+            <tr class="odd">
+            <td>ARM64</td>
+            <td>32</td>
+            <td>$0.050</td>
+            </tr>
+            <tr class="even">
+            <td>ARM64</td>
+            <td>64</td>
+            <td>$0.98</td>
+            </tr>
+            </tbody>
+            </table>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>Hardware</th>
+            <th>Core size</th>
+            <th>Prijs / minuut</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>GPU-powerd</td>
+            <td>4</td>
+            <td>$0.052</td>
+            </tr>
+            </tbody>
+            </table>
+            <h3 id="windows">Windows</h3>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>Hardware</th>
+            <th>Core size</th>
+            <th>Prijs / minuut</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>x64</td>
+            <td>Server 2</td>
+            <td>$0.010</td>
+            </tr>
+            <tr class="even">
+            <td>x64</td>
+            <td>Desktop 4</td>
+            <td>$0.022</td>
+            </tr>
+            <tr class="odd">
+            <td>x64</td>
+            <td>Server 8</td>
+            <td>$0.042</td>
+            </tr>
+            <tr class="even">
+            <td>x64</td>
+            <td>Server 16</td>
+            <td>$0.082</td>
+            </tr>
+            <tr class="odd">
+            <td>x64</td>
+            <td>Server 32</td>
+            <td>$0.162</td>
+            </tr>
+            <tr class="even">
+            <td>x64</td>
+            <td>Server 64</td>
+            <td>$0.322</td>
+            </tr>
+            <tr class="odd">
+            <td>x64</td>
+            <td>Server 96</td>
+            <td>$0.552</td>
+            </tr>
+            </tbody>
+            </table>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>Hardware</th>
+            <th>Core size</th>
+            <th>Prijs / minuut</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>ARM64</td>
+            <td>Desktop 2</td>
+            <td>$0.008</td>
+            </tr>
+            <tr class="even">
+            <td>ARM64</td>
+            <td>Desktop 4</td>
+            <td>$0.014</td>
+            </tr>
+            <tr class="odd">
+            <td>ARM64</td>
+            <td>Desktop 8</td>
+            <td>$0.026</td>
+            </tr>
+            <tr class="even">
+            <td>ARM64</td>
+            <td>Desktop 16</td>
+            <td>$0.050</td>
+            </tr>
+            <tr class="odd">
+            <td>ARM64</td>
+            <td>Desktop 32</td>
+            <td>$0.098</td>
+            </tr>
+            <tr class="even">
+            <td>ARM64</td>
+            <td>Desktop 64</td>
+            <td>$0.194</td>
+            </tr>
+            </tbody>
+            </table>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>Hardware</th>
+            <th>Core size</th>
+            <th>Prijs / minuut</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>GPU-powerd</td>
+            <td>4</td>
+            <td>$0.102</td>
+            </tr>
+            </tbody>
+            </table>
+            <h3 id="macos">macOS</h3>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>Hardware</th>
+            <th>Core size</th>
+            <th>Prijs / minuut</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>x64</td>
+            <td>4 (Intel)</td>
+            <td>$0.062</td>
+            </tr>
+            <tr class="even">
+            <td>x64</td>
+            <td>12 (Intel)</td>
+            <td>$0.077</td>
+            </tr>
+            </tbody>
+            </table>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>Hardware</th>
+            <th>Core size</th>
+            <th>Prijs / minuut</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>ARM64</td>
+            <td>3 (M1)</td>
+            <td>$0.062</td>
+            </tr>
+            <tr class="even">
+            <td>ARM64</td>
+            <td>5 (M2 Pro)</td>
+            <td>$0.102</td>
+            </tr>
+            </tbody>
+            </table>
+            <h3 id="self-hosted">Self hosted</h3>
+            <p>Sinds 1 Januarri 2026 worden er kosten in kaart gebracht voor het hosten van een eigen runner. Deze kosten bedragen <strong>$0.002 per minuut</strong>, onafhankelijk welk soort model je gebruikt.</p>
+            <h2 id="self-hosted-runner-hosten">Self hosted runner hosten</h2>
+            <p>Op een device kan je standaard <strong>één</strong> runner hosten via de terminal. Het nadeel hiervan is dat deze terminal altijd open moet staan en dat je er maar één runner kan draaien, wat vervelend is als je bezig bent met meerdere projecten.</p>
+            <p>De oplossing voor dit probleem is Docker. Hiermee kan je meerdere runners voor één of meerdere GitHub repositories gebruiken. Tijdens dit project wordt er uitleg gegeven over hoe je één of meerdere runners binnen een project kan gebruiken.</p>
+            <h3 id="runnen-met-docker">Runnen met Docker</h3>
+            <h4 id="docker-compose.yml">Docker-compose.yml</h4>
+            <p>Docker-compose.yml zorgt ervoor dat docker alle containers, netwerken en variabelen instelt.</p>
+            <div class="sourceCode" id="cb1"><pre class="sourceCode yml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">services</span><span class="kw">:</span></span>
+            <span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="at">  </span><span class="fu">github-runner1</span><span class="kw">:</span></span>
+            <span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="at">    </span><span class="fu">build</span><span class="kw">:</span><span class="at"> </span></span>
+            <span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="at">      </span><span class="fu">context</span><span class="kw">:</span><span class="at"> .</span></span>
+            <span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="at">      </span><span class="fu">args</span><span class="kw">:</span><span class="at"> </span></span>
+            <span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a><span class="at">        </span><span class="fu">GITHUB_PAT</span><span class="kw">:</span><span class="at"> ${GITHUB_PAT}</span></span>
+            <span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="at">      </span></span>
+            <span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a><span class="at">    </span><span class="fu">container_name</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;github-runner1-${PROJECT}&quot;</span></span>
+            <span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a><span class="at">    </span><span class="fu">restart</span><span class="kw">:</span><span class="at"> unless-stopped </span></span>
+            <span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
+            <span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a><span class="at">      </span><span class="fu">RUNNER_URL</span><span class="kw">:</span><span class="at"> ${RUNNER_URL}</span></span>
+            <span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a><span class="at">      </span><span class="fu">RUNNER_WORKDIR</span><span class="kw">:</span><span class="at"> /home/runner/_work</span></span>
+            <span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a><span class="at">      </span><span class="fu">LABELS</span><span class="kw">:</span><span class="at"> self-hosted,Linux,X64,${PROJECT}</span></span>
+            <span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a><span class="at">      </span><span class="fu">EPHEMERAL</span><span class="kw">:</span><span class="at"> </span><span class="dv">0</span></span>
+            <span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a><span class="at">      </span><span class="fu">PROJECT</span><span class="kw">:</span><span class="at"> ${PROJECT}</span></span>
+            <span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a><span class="at">      </span><span class="fu">GITHUB_PAT</span><span class="kw">:</span><span class="at"> ${GITHUB_PAT}</span></span>
+            <span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a><span class="at">      </span><span class="fu">REPO_OWNER</span><span class="kw">:</span><span class="at"> ${REPO_OWNER}</span></span>
+            <span id="cb1-18"><a href="#cb1-18" aria-hidden="true"></a><span class="at">      </span><span class="fu">REPO_NAME</span><span class="kw">:</span><span class="at"> ${REPO_NAME}</span></span>
+            <span id="cb1-19"><a href="#cb1-19" aria-hidden="true"></a><span class="at">      </span><span class="fu">NUMBER</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+            <span id="cb1-20"><a href="#cb1-20" aria-hidden="true"></a><span class="at">    </span><span class="fu">volumes</span><span class="kw">:</span></span>
+            <span id="cb1-21"><a href="#cb1-21" aria-hidden="true"></a><span class="at">      </span><span class="kw">-</span><span class="at"> /var/run/docker.sock:/var/run/docker.sock</span></span>
+            <span id="cb1-22"><a href="#cb1-22" aria-hidden="true"></a><span class="at">    </span><span class="fu">networks</span><span class="kw">:</span></span>
+            <span id="cb1-23"><a href="#cb1-23" aria-hidden="true"></a><span class="at">      </span><span class="kw">-</span><span class="at"> internal</span></span>
+            <span id="cb1-24"><a href="#cb1-24" aria-hidden="true"></a></span>
+            <span id="cb1-25"><a href="#cb1-25" aria-hidden="true"></a><span class="fu">networks</span><span class="kw">:</span></span>
+            <span id="cb1-26"><a href="#cb1-26" aria-hidden="true"></a><span class="at">  </span><span class="fu">internal</span><span class="kw">:</span></span>
+            <span id="cb1-27"><a href="#cb1-27" aria-hidden="true"></a></span>
+            <span id="cb1-28"><a href="#cb1-28" aria-hidden="true"></a><span class="fu">volumes</span><span class="kw">:</span></span>
+            <span id="cb1-29"><a href="#cb1-29" aria-hidden="true"></a><span class="at">  </span><span class="fu">gh-pages-data</span><span class="kw">:</span></span>
+            <span id="cb1-30"><a href="#cb1-30" aria-hidden="true"></a><span class="at">  </span><span class="fu">runner-data</span><span class="kw">:</span></span></code></pre></div>
+            <h4 id="dockerfile">Dockerfile</h4>
+            <div class="sourceCode" id="cb2"><pre class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="co"># Waar de runner op draait</span></span>
+            <span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="kw">FROM</span> ubuntu:22.04</span>
+            <span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a></span>
+            <span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="co"># Default antwoorden worden door gegeven op vragen</span></span>
+            <span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="kw">ENV</span> DEBIAN_FRONTEND=noninteractive</span>
+            <span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a></span>
+            <span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a><span class="co"># GitHub Personal Acces Token (PAT) ophalen uit de .env file</span></span>
+            <span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a><span class="kw">ARG</span> GITHUB_PAT</span>
+            <span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a><span class="kw">ENV</span> GITHUB_PAT=${GITHUB_PAT}</span>
+            <span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a></span>
+            <span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a><span class="co"># Tijdszone instellen</span></span>
+            <span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a><span class="kw">ENV</span> TZ=Europe/Amsterdam</span>
+            <span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a><span class="kw">RUN</span> ln -snf /usr/share/zoneinfo/$TZ /etc/localtime &amp;&amp; echo $TZ &gt; /etc/timezone</span>
+            <span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a></span>
+            <span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a><span class="co"># Standaard installaties voor het opzetten van de runner</span></span>
+            <span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a><span class="kw">RUN</span> apt-get update &amp;&amp; apt-get install -y \</span>
+            <span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>    sudo \</span>
+            <span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a>    curl \</span>
+            <span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a>    jq \</span>
+            <span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a>    git \</span>
+            <span id="cb2-21"><a href="#cb2-21" aria-hidden="true"></a>    ca-certificates \</span>
+            <span id="cb2-22"><a href="#cb2-22" aria-hidden="true"></a>    gnupg \</span>
+            <span id="cb2-23"><a href="#cb2-23" aria-hidden="true"></a>    lsb-release \</span>
+            <span id="cb2-24"><a href="#cb2-24" aria-hidden="true"></a>    libicu70 &amp;&amp; \</span>
+            <span id="cb2-25"><a href="#cb2-25" aria-hidden="true"></a>    rm -rf /var/lib/apt/lists/*</span>
+            <span id="cb2-26"><a href="#cb2-26" aria-hidden="true"></a></span>
+            <span id="cb2-27"><a href="#cb2-27" aria-hidden="true"></a><span class="co"># Een non-root gebruiker &#39;runner&#39; aanmaken met sudo rechten</span></span>
+            <span id="cb2-28"><a href="#cb2-28" aria-hidden="true"></a><span class="kw">RUN</span> useradd -m runner &amp;&amp; echo <span class="st">&quot;runner ALL=(ALL) NOPASSWD:ALL&quot;</span> &gt;&gt; /etc/sudoers</span>
+            <span id="cb2-29"><a href="#cb2-29" aria-hidden="true"></a></span>
+            <span id="cb2-30"><a href="#cb2-30" aria-hidden="true"></a><span class="co"># Werkmap bepalen</span></span>
+            <span id="cb2-31"><a href="#cb2-31" aria-hidden="true"></a><span class="kw">WORKDIR</span> /home/runner</span>
+            <span id="cb2-32"><a href="#cb2-32" aria-hidden="true"></a></span>
+            <span id="cb2-33"><a href="#cb2-33" aria-hidden="true"></a><span class="co"># Code om de runner automatisch te laten registreren </span></span>
+            <span id="cb2-34"><a href="#cb2-34" aria-hidden="true"></a><span class="kw">RUN</span> ARCH=$(uname -m) &amp;&amp; \</span>
+            <span id="cb2-35"><a href="#cb2-35" aria-hidden="true"></a>  <span class="co"># Type architectuur vaststellen </span></span>
+            <span id="cb2-36"><a href="#cb2-36" aria-hidden="true"></a>    case <span class="st">&quot;$ARCH&quot;</span> in \</span>
+            <span id="cb2-37"><a href="#cb2-37" aria-hidden="true"></a>      x86_64) ARCH=<span class="st">&quot;x64&quot;</span> ;; \</span>
+            <span id="cb2-38"><a href="#cb2-38" aria-hidden="true"></a>      aarch64|arm64) ARCH=<span class="st">&quot;arm64&quot;</span> ;; \</span>
+            <span id="cb2-39"><a href="#cb2-39" aria-hidden="true"></a>      armv7l|armhf) ARCH=<span class="st">&quot;arm&quot;</span> ;; \</span>
+            <span id="cb2-40"><a href="#cb2-40" aria-hidden="true"></a>      *) echo <span class="st">&quot;Unsupported architecture: $ARCH&quot;</span>; exit 1 ;; \</span>
+            <span id="cb2-41"><a href="#cb2-41" aria-hidden="true"></a>    esac &amp;&amp; \</span>
+            <span id="cb2-42"><a href="#cb2-42" aria-hidden="true"></a>    echo <span class="st">&quot;Detected architecture: $ARCH&quot;</span> &amp;&amp; \</span>
+            <span id="cb2-43"><a href="#cb2-43" aria-hidden="true"></a>    <span class="co"># Download URL voor runner vast stellen</span></span>
+            <span id="cb2-44"><a href="#cb2-44" aria-hidden="true"></a>    RUNNER_URL=$(curl -s \</span>
+            <span id="cb2-45"><a href="#cb2-45" aria-hidden="true"></a>      -H <span class="st">&quot;Authorization: token ${GITHUB_PAT}&quot;</span> \</span>
+            <span id="cb2-46"><a href="#cb2-46" aria-hidden="true"></a>      https://api.github.com/repos/actions/runner/releases/latest \</span>
+            <span id="cb2-47"><a href="#cb2-47" aria-hidden="true"></a>      | jq -r <span class="st">&quot;.assets[] | select(.name | contains(\&quot;</span>linux-$ARCH\<span class="st">&quot;) and endswith(\&quot;</span>.tar.gz\<span class="st">&quot;)) | .browser_download_url&quot;</span>) &amp;&amp; \</span>
+            <span id="cb2-48"><a href="#cb2-48" aria-hidden="true"></a>    echo <span class="st">&quot;Downloading: $RUNNER_URL&quot;</span> &amp;&amp; \</span>
+            <span id="cb2-49"><a href="#cb2-49" aria-hidden="true"></a>    <span class="co"># Runner downloaden (Gecomprimeerd bestand)</span></span>
+            <span id="cb2-50"><a href="#cb2-50" aria-hidden="true"></a>    curl -L -H <span class="st">&quot;Authorization: token ${GITHUB_PAT}&quot;</span> \</span>
+            <span id="cb2-51"><a href="#cb2-51" aria-hidden="true"></a>      -o actions-runner.tar.gz <span class="st">&quot;$RUNNER_URL&quot;</span> &amp;&amp; \</span>
+            <span id="cb2-52"><a href="#cb2-52" aria-hidden="true"></a>    <span class="co"># Gecomprimeerd bestand uitpakken en verwijderen</span></span>
+            <span id="cb2-53"><a href="#cb2-53" aria-hidden="true"></a>    tar xzf actions-runner.tar.gz &amp;&amp; rm actions-runner.tar.gz</span>
+            <span id="cb2-54"><a href="#cb2-54" aria-hidden="true"></a></span>
+            <span id="cb2-55"><a href="#cb2-55" aria-hidden="true"></a><span class="co"># Vanaf hier alle commando&#39;s uitvoeren als de &#39;runner&#39; gebruiker</span></span>
+            <span id="cb2-56"><a href="#cb2-56" aria-hidden="true"></a><span class="kw">USER</span> runner</span>
+            <span id="cb2-57"><a href="#cb2-57" aria-hidden="true"></a></span>
+            <span id="cb2-58"><a href="#cb2-58" aria-hidden="true"></a><span class="co"># Zorgen dat het script uitvoerbaar is en eventuele Windows-regeleinden (CRLF) verwijderen</span></span>
+            <span id="cb2-59"><a href="#cb2-59" aria-hidden="true"></a><span class="kw">COPY</span> --chown=runner:runner entrypoint.sh /home/runner/entrypoint.sh</span>
+            <span id="cb2-60"><a href="#cb2-60" aria-hidden="true"></a></span>
+            <span id="cb2-61"><a href="#cb2-61" aria-hidden="true"></a><span class="kw">RUN</span> sudo apt-get update &amp;&amp; \</span>
+            <span id="cb2-62"><a href="#cb2-62" aria-hidden="true"></a>    sudo apt-get install -y sed &amp;&amp; \</span>
+            <span id="cb2-63"><a href="#cb2-63" aria-hidden="true"></a>    sed -i <span class="st">&#39;s/\r//g&#39;</span> /home/runner/entrypoint.sh &amp;&amp; \</span>
+            <span id="cb2-64"><a href="#cb2-64" aria-hidden="true"></a>    chmod +x /home/runner/entrypoint.sh</span>
+            <span id="cb2-65"><a href="#cb2-65" aria-hidden="true"></a></span>
+            <span id="cb2-66"><a href="#cb2-66" aria-hidden="true"></a><span class="kw">ENTRYPOINT</span> [<span class="st">&quot;/home/runner/entrypoint.sh&quot;</span>]</span></code></pre></div>
+            <h4 id="entrypoint.sh">entrypoint.sh</h4>
+            <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="co">#!/bin/bash</span></span>
+            <span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="kw">set</span> <span class="ex">-e</span></span>
+            <span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="co"># Tijdszone goed zetten voor shellscript</span></span>
+            <span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="bu">export</span> <span class="va">TZ=${TZ:-</span>Europe/Amsterdam<span class="va">}</span></span>
+            <span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a></span>
+            <span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a></span>
+            <span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a><span class="fu">cleanup()</span> <span class="kw">{</span></span>
+            <span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>  <span class="bu">echo</span> <span class="st">&quot;Runner wordt afgemeld bij GitHub...&quot;</span></span>
+            <span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a></span>
+            <span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a>  <span class="va">REMOVE_TOKEN=$(</span><span class="ex">curl</span> -sX POST <span class="kw">\</span></span>
+            <span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a>      <span class="ex">-H</span> <span class="st">&quot;Authorization: token </span><span class="va">${GITHUB_PAT}</span><span class="st">&quot;</span> <span class="kw">\</span></span>
+            <span id="cb3-12"><a href="#cb3-12" aria-hidden="true"></a>      <span class="st">&quot;https://api.github.com/repos/</span><span class="va">${REPO_OWNER}</span><span class="st">/</span><span class="va">${REPO_NAME}</span><span class="st">/actions/runners/remove-token&quot;</span></span>
+            <span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a> <span class="kw">|</span> <span class="ex">jq</span> -r .token<span class="va">)</span></span>
+            <span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a></span>
+            <span id="cb3-15"><a href="#cb3-15" aria-hidden="true"></a>  <span class="kw">if</span><span class="bu"> [</span> <span class="ot">-z</span> <span class="st">&quot;</span><span class="va">$REMOVE_TOKEN</span><span class="st">&quot;</span><span class="bu"> ]</span>; <span class="kw">then</span></span>
+            <span id="cb3-16"><a href="#cb3-16" aria-hidden="true"></a>    <span class="bu">echo</span> <span class="st">&quot;Kon geen removal-token ophalen (handmatig verwijderen).&quot;</span></span>
+            <span id="cb3-17"><a href="#cb3-17" aria-hidden="true"></a>    <span class="bu">return</span></span>
+            <span id="cb3-18"><a href="#cb3-18" aria-hidden="true"></a>  <span class="kw">fi</span></span>
+            <span id="cb3-19"><a href="#cb3-19" aria-hidden="true"></a></span>
+            <span id="cb3-20"><a href="#cb3-20" aria-hidden="true"></a>  <span class="ex">./config.sh</span> remove --unattended --token <span class="st">&quot;</span><span class="va">$REMOVE_TOKEN</span><span class="st">&quot;</span> <span class="kw">||</span> <span class="fu">true</span></span>
+            <span id="cb3-21"><a href="#cb3-21" aria-hidden="true"></a><span class="kw">}</span></span>
+            <span id="cb3-22"><a href="#cb3-22" aria-hidden="true"></a></span>
+            <span id="cb3-23"><a href="#cb3-23" aria-hidden="true"></a><span class="bu">trap</span> cleanup EXIT SIGINT SIGTERM</span>
+            <span id="cb3-24"><a href="#cb3-24" aria-hidden="true"></a></span>
+            <span id="cb3-25"><a href="#cb3-25" aria-hidden="true"></a><span class="va">RUNNER_TOKEN=$(</span><span class="ex">curl</span> -sX POST <span class="kw">\</span></span>
+            <span id="cb3-26"><a href="#cb3-26" aria-hidden="true"></a>  <span class="ex">-H</span> <span class="st">&quot;Authorization: token </span><span class="va">${GITHUB_PAT}</span><span class="st">&quot;</span> <span class="kw">\</span></span>
+            <span id="cb3-27"><a href="#cb3-27" aria-hidden="true"></a>  <span class="ex">https</span>://api.github.com/repos/<span class="va">${REPO_OWNER}</span>/<span class="va">${REPO_NAME}</span>/actions/runners/registration-token <span class="kw">\</span></span>
+            <span id="cb3-28"><a href="#cb3-28" aria-hidden="true"></a>  <span class="kw">|</span> <span class="ex">jq</span> -r .token<span class="va">)</span></span>
+            <span id="cb3-29"><a href="#cb3-29" aria-hidden="true"></a></span>
+            <span id="cb3-30"><a href="#cb3-30" aria-hidden="true"></a><span class="kw">if</span><span class="bu"> [</span> <span class="ot">-z</span> <span class="st">&quot;</span><span class="va">$RUNNER_TOKEN</span><span class="st">&quot;</span><span class="bu"> ]</span> <span class="kw">||</span><span class="bu"> [</span> <span class="ot">-z</span> <span class="st">&quot;</span><span class="va">$RUNNER_URL</span><span class="st">&quot;</span><span class="bu"> ]</span>; <span class="kw">then</span></span>
+            <span id="cb3-31"><a href="#cb3-31" aria-hidden="true"></a>  <span class="bu">echo</span> <span class="st">&quot;ERROR: RUNNER_TOKEN en RUNNER_URL moeten ingesteld zijn.&quot;</span></span>
+            <span id="cb3-32"><a href="#cb3-32" aria-hidden="true"></a>  <span class="bu">exit</span> 1</span>
+            <span id="cb3-33"><a href="#cb3-33" aria-hidden="true"></a><span class="kw">fi</span></span>
+            <span id="cb3-34"><a href="#cb3-34" aria-hidden="true"></a></span>
+            <span id="cb3-35"><a href="#cb3-35" aria-hidden="true"></a><span class="va">UTC_TS=$(</span><span class="fu">date</span> -u <span class="st">&#39;+D%dM%mY%Y H%HM%MS%S UTC&#39;</span><span class="va">)</span></span>
+            <span id="cb3-36"><a href="#cb3-36" aria-hidden="true"></a><span class="va">RUNNER_NAME=</span><span class="st">&quot;</span><span class="va">${REPO_NAME}</span><span class="st">-</span><span class="va">${NUMBER}</span><span class="st">-</span><span class="va">${UTC_TS}</span><span class="st">&quot;</span></span>
+            <span id="cb3-37"><a href="#cb3-37" aria-hidden="true"></a></span>
+            <span id="cb3-38"><a href="#cb3-38" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;==========================================&quot;</span></span>
+            <span id="cb3-39"><a href="#cb3-39" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;Project: </span><span class="va">$REPO_NAME</span><span class="st">&quot;</span></span>
+            <span id="cb3-40"><a href="#cb3-40" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;Runner naam: </span><span class="va">$RUNNER_NAME</span><span class="st">&quot;</span></span>
+            <span id="cb3-41"><a href="#cb3-41" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;Runner URL: </span><span class="va">$RUNNER_URL</span><span class="st">&quot;</span></span>
+            <span id="cb3-42"><a href="#cb3-42" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;==========================================&quot;</span></span>
+            <span id="cb3-43"><a href="#cb3-43" aria-hidden="true"></a></span>
+            <span id="cb3-44"><a href="#cb3-44" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;Controleer of runner al geconfigureerd is...&quot;</span></span>
+            <span id="cb3-45"><a href="#cb3-45" aria-hidden="true"></a><span class="kw">if</span><span class="bu"> [</span> <span class="ot">!</span> <span class="ot">-f</span> .runner<span class="bu"> ]</span>; <span class="kw">then</span></span>
+            <span id="cb3-46"><a href="#cb3-46" aria-hidden="true"></a>  <span class="bu">echo</span> <span class="st">&quot;Configureren runner </span><span class="va">$RUNNER_NAME</span><span class="st"> voor </span><span class="va">$RUNNER_URL</span><span class="st">&quot;</span></span>
+            <span id="cb3-47"><a href="#cb3-47" aria-hidden="true"></a>  </span>
+            <span id="cb3-48"><a href="#cb3-48" aria-hidden="true"></a>  <span class="kw">if</span><span class="bu"> [</span> <span class="st">&quot;</span><span class="va">$EPHEMERAL</span><span class="st">&quot;</span> <span class="ot">=</span> <span class="st">&quot;1&quot;</span><span class="bu"> ]</span>; <span class="kw">then</span></span>
+            <span id="cb3-49"><a href="#cb3-49" aria-hidden="true"></a>    <span class="va">EXTRA_ARGS=</span><span class="st">&quot;--ephemeral&quot;</span></span>
+            <span id="cb3-50"><a href="#cb3-50" aria-hidden="true"></a>  <span class="kw">fi</span></span>
+            <span id="cb3-51"><a href="#cb3-51" aria-hidden="true"></a></span>
+            <span id="cb3-52"><a href="#cb3-52" aria-hidden="true"></a>  <span class="ex">./config.sh</span> <span class="kw">\</span></span>
+            <span id="cb3-53"><a href="#cb3-53" aria-hidden="true"></a>    <span class="ex">--url</span> <span class="st">&quot;</span><span class="va">$RUNNER_URL</span><span class="st">&quot;</span> <span class="kw">\</span></span>
+            <span id="cb3-54"><a href="#cb3-54" aria-hidden="true"></a>    <span class="ex">--token</span> <span class="st">&quot;</span><span class="va">$RUNNER_TOKEN</span><span class="st">&quot;</span> <span class="kw">\</span></span>
+            <span id="cb3-55"><a href="#cb3-55" aria-hidden="true"></a>    <span class="ex">--name</span> <span class="st">&quot;</span><span class="va">$RUNNER_NAME</span><span class="st">&quot;</span> <span class="kw">\</span></span>
+            <span id="cb3-56"><a href="#cb3-56" aria-hidden="true"></a>    <span class="ex">--work</span> _work <span class="kw">\</span></span>
+            <span id="cb3-57"><a href="#cb3-57" aria-hidden="true"></a>    <span class="ex">--labels</span> <span class="st">&quot;</span><span class="va">$LABELS</span><span class="st">&quot;</span> <span class="kw">\</span></span>
+            <span id="cb3-58"><a href="#cb3-58" aria-hidden="true"></a>    <span class="ex">--unattended</span> <span class="kw">\</span></span>
+            <span id="cb3-59"><a href="#cb3-59" aria-hidden="true"></a>    <span class="va">$EXTRA_ARGS</span></span>
+            <span id="cb3-60"><a href="#cb3-60" aria-hidden="true"></a><span class="kw">else</span></span>
+            <span id="cb3-61"><a href="#cb3-61" aria-hidden="true"></a>  <span class="bu">echo</span> <span class="st">&quot;Runner al geconfigureerd, sla config stap over.&quot;</span></span>
+            <span id="cb3-62"><a href="#cb3-62" aria-hidden="true"></a><span class="kw">fi</span></span>
+            <span id="cb3-63"><a href="#cb3-63" aria-hidden="true"></a></span>
+            <span id="cb3-64"><a href="#cb3-64" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;==========================================&quot;</span></span>
+            <span id="cb3-65"><a href="#cb3-65" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;Runner </span><span class="va">$RUNNER_NAME</span><span class="st"> gestart...&quot;</span></span>
+            <span id="cb3-66"><a href="#cb3-66" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;==========================================&quot;</span></span>
+            <span id="cb3-67"><a href="#cb3-67" aria-hidden="true"></a><span class="bu">exec</span> ./run.sh</span></code></pre></div>
+            <h4 id="start_runner.sh">start_runner.sh</h4>
+            <p>Start runner.sh is en script waardoor er geen gebruik gemaakt hoeft te worden van de Docker commants om de runner snel aan te zetten</p>
+            <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="co">#!/bin/bash</span></span>
+            <span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="kw">set</span> <span class="ex">-e</span></span>
+            <span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$(</span><span class="fu">dirname</span> <span class="st">&quot;</span><span class="va">$0</span><span class="st">&quot;</span><span class="va">)</span><span class="st">&quot;</span></span>
+            <span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a></span>
+            <span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="va">PROJECT=$(</span><span class="fu">basename</span> <span class="st">&quot;</span><span class="va">$(</span><span class="fu">dirname</span> <span class="st">&quot;</span><span class="va">$(</span><span class="fu">dirname</span> <span class="st">&quot;</span><span class="va">$PWD</span><span class="st">&quot;</span><span class="va">)</span><span class="st">&quot;</span><span class="va">)</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="fu">tr</span> <span class="st">&#39;[:upper:]&#39;</span> <span class="st">&#39;[:lower:]&#39;</span><span class="va">)</span></span>
+            <span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a><span class="va">IMAGE_NAME=</span><span class="st">&quot;</span><span class="va">${PROJECT}</span><span class="st">-github-runner&quot;</span></span>
+            <span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a></span>
+            <span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;--- Start runner voor project: </span><span class="va">$PROJECT</span><span class="st"> ---&quot;</span></span>
+            <span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a></span>
+            <span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a><span class="co"># Controleer of image al bestaat — bouwen indien nodig</span></span>
+            <span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a><span class="kw">if</span> ! <span class="ex">docker</span> image inspect <span class="st">&quot;</span><span class="va">$IMAGE_NAME</span><span class="st">:latest&quot;</span> <span class="op">&gt;</span>/dev/null <span class="op">2&gt;&amp;1</span><span class="kw">;</span> <span class="kw">then</span></span>
+            <span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a>    <span class="bu">echo</span> <span class="st">&quot;Geen bestaande image gevonden — bouwen...&quot;</span></span>
+            <span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a>    <span class="va">PROJECT=</span><span class="st">&quot;</span><span class="va">$PROJECT</span><span class="st">&quot;</span> <span class="ex">docker</span> compose -p <span class="st">&quot;</span><span class="va">$PROJECT</span><span class="st">&quot;</span> build --progress=plain</span>
+            <span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a><span class="kw">else</span></span>
+            <span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a>    <span class="bu">echo</span> <span class="st">&quot;Image </span><span class="va">$IMAGE_NAME</span><span class="st"> bestaat al.&quot;</span></span>
+            <span id="cb4-16"><a href="#cb4-16" aria-hidden="true"></a><span class="kw">fi</span></span>
+            <span id="cb4-17"><a href="#cb4-17" aria-hidden="true"></a></span>
+            <span id="cb4-18"><a href="#cb4-18" aria-hidden="true"></a><span class="co"># ontainers starten in de achtergrond</span></span>
+            <span id="cb4-19"><a href="#cb4-19" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;Containers starten...&quot;</span></span>
+            <span id="cb4-20"><a href="#cb4-20" aria-hidden="true"></a><span class="va">PROJECT=</span><span class="st">&quot;</span><span class="va">$PROJECT</span><span class="st">&quot;</span> <span class="ex">docker</span> compose -p <span class="st">&quot;</span><span class="va">$PROJECT</span><span class="st">&quot;</span> up -d</span>
+            <span id="cb4-21"><a href="#cb4-21" aria-hidden="true"></a></span>
+            <span id="cb4-22"><a href="#cb4-22" aria-hidden="true"></a><span class="co"># ogs streamen totdat de verbinding is bevestigd</span></span>
+            <span id="cb4-23"><a href="#cb4-23" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;Wachten op verbinding met GitHub...&quot;</span></span>
+            <span id="cb4-24"><a href="#cb4-24" aria-hidden="true"></a></span>
+            <span id="cb4-25"><a href="#cb4-25" aria-hidden="true"></a><span class="va">PROJECT=</span><span class="st">&quot;</span><span class="va">$PROJECT</span><span class="st">&quot;</span> <span class="ex">docker</span> compose -p <span class="st">&quot;</span><span class="va">$PROJECT</span><span class="st">&quot;</span> logs -f --no-log-prefix <span class="kw">|</span> <span class="fu">grep</span> -m 1 <span class="st">&quot;Connected to GitHub&quot;</span></span>
+            <span id="cb4-26"><a href="#cb4-26" aria-hidden="true"></a></span>
+            <span id="cb4-27"><a href="#cb4-27" aria-hidden="true"></a><span class="bu">echo</span> -e <span class="st">&quot;\n--- Runner is succesvol verbonden met GitHub! ---&quot;</span></span></code></pre></div>
+            <h4 id="stop_runner.sh">stop_runner.sh</h4>
+            <p>Stop runner.sh is en script waardoor er geen gebruik gemaakt hoeft te worden van de Docker commants om de runner te laten deregistreren en te verwijderen</p>
+            <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="co">#!/bin/bash</span></span>
+            <span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="va">PROJECT=$(</span><span class="fu">basename</span> <span class="st">&quot;</span><span class="va">$(</span><span class="fu">dirname</span> <span class="st">&quot;</span><span class="va">$(</span><span class="fu">dirname</span> <span class="st">&quot;</span><span class="va">$PWD</span><span class="st">&quot;</span><span class="va">)</span><span class="st">&quot;</span><span class="va">)</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="fu">tr</span> <span class="st">&#39;[:upper:]&#39;</span> <span class="st">&#39;[:lower:]&#39;</span><span class="va">)</span></span>
+            <span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a></span>
+            <span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;--- Stoppen en afmelden van runner project: </span><span class="va">$PROJECT</span><span class="st"> ---&quot;</span></span>
+            <span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a></span>
+            <span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a><span class="va">PROJECT=</span><span class="st">&quot;</span><span class="va">$PROJECT</span><span class="st">&quot;</span> <span class="ex">docker</span> compose -p <span class="st">&quot;</span><span class="va">$PROJECT</span><span class="st">&quot;</span> logs -f --no-log-prefix <span class="kw">&amp;</span></span>
+            <span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a><span class="va">LOGS_PID=$!</span></span>
+            <span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a></span>
+            <span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a><span class="va">PROJECT=</span><span class="st">&quot;</span><span class="va">$PROJECT</span><span class="st">&quot;</span> <span class="ex">docker</span> compose -p <span class="st">&quot;</span><span class="va">$PROJECT</span><span class="st">&quot;</span> down --rmi local --remove-orphans</span>
+            <span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a></span>
+            <span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a><span class="fu">sleep</span> 2</span>
+            <span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a><span class="bu">kill</span> <span class="va">$LOGS_PID</span> <span class="op">2&gt;</span>/dev/null</span>
+            <span id="cb5-13"><a href="#cb5-13" aria-hidden="true"></a></span>
+            <span id="cb5-14"><a href="#cb5-14" aria-hidden="true"></a><span class="bu">echo</span> -e <span class="st">&quot;\n--- Runner is succesvol afgemeld en verwijderd! ---&quot;</span></span></code></pre></div>
+    </main>
+  </div>
+</body>
+</html>
