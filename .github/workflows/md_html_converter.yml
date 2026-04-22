@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Pandoc
-        run: sudo apt-get install -y pandoc
+        run: sudo apt-get update && sudo apt-get install -y pandoc file
 
       - name: Convert Markdown naar HTML
         run: |
