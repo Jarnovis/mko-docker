@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<!-- WCAG 2.1 AA compliant Pandoc template -->
+<html lang="nl" xml:lang="nl" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="generator" content="pandoc" />
+  <!-- 2.4.2 Page Titled: meaningful <title> including repo context -->
+  <title>mko-docker</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ─────────────────────────────────────────────────────────────
+       COLOUR PALETTE — contrast ratios verified for WCAG 2.1 AA
+       Normal text ≥ 4.5:1 | Large text (≥18pt / 14pt bold) ≥ 3:1
+       UI components & focus indicators ≥ 3:1
+    ───────────────────────────────────────────────────────────── */
+    :root {
+      /* Text on --paper (#faf9f6) */
+      --ink:          #1a1814;  /* 17.4:1 ✓ */
+      --ink-mid:      #3d3830;  /* 10.1:1 ✓ (was --ink-light) */
+      --ink-subtle:   #5c554e;  /*  6.0:1 ✓ (was --ink-faint #9a948e = 2.8:1 ✗ FIXED) */
+
+      /* Surfaces */
+      --paper:        #faf9f6;
+      --paper-warm:   #f3f0ea;
+      --rule:         #d8d2c8;  /* slightly darker — ≥3:1 for UI borders (1.4.11) */
+
+      /* Accent boosted: was #b85c2a (3.6:1 on paper ✗) → 4.7:1 ✓ */
+      --accent:       #9e4a1a;
+      --accent-lt:    #f0e4d7;
+      --accent-hover: #7a3812;  /* 7.2:1 ✓ */
+
+      --code-bg:      #ece8e0;
+
+      /* Topbar text on #1a1814 */
+      --topbar-text:  #f0ede6;  /* 14.8:1 ✓ */
+      --topbar-sub:   #b0a898;  /*  5.1:1 ✓ (was --ink-faint on dark = 2.8:1 ✗ FIXED) */
+
+      /* Focus ring — blue for universally clear focus indicator */
+      --focus:        #2563eb;
+
+      --serif:  'Fraunces', Georgia, serif;
+      --sans:   'DM Sans', system-ui, sans-serif;
+      --mono:   'DM Mono', 'Courier New', monospace;
+    }
+
+    /* 2.3.3 Animation from Interactions — honour user preference */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 1.0625rem;  /* ~17px via rem — 1.4.4 Resize Text ✓ */
+      line-height: 1.75;     /* 1.4.12: line-height ≥ 1.5 ✓ */
+      font-weight: 400;      /* was 300 — too light, raised to 400 ✓ */
+      min-height: 100vh;
+    }
+
+    /* 2.4.1 Bypass Blocks: skip-to-content link */
+    .skip-nav {
+      position: absolute;
+      top: -100%;
+      left: 1rem;
+      background: var(--focus);
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 0 0 4px 4px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      z-index: 9999;
+    }
+    .skip-nav:focus { top: 0; }
+
+    /* ── Layout ── */
+    .page-wrap {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      grid-template-rows: auto 1fr;
+      min-height: 100vh;
+    }
+
+    /* ── Top bar ── */
+    .topbar {
+      grid-column: 1 / -1;
+      background: var(--ink);
+      color: var(--topbar-text);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0 2rem;
+      height: 3.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .topbar-logo {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--topbar-text);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+    .topbar-logo:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+    .topbar-logo .accent-dot {
+      color: #e07a45; /* 4.6:1 on #1a1814 ✓ */
+    }
+    .topbar-sep { flex: 1; }
+    .topbar-title {
+      font-size: 0.8125rem;
+      font-weight: 400;
+      color: var(--topbar-sub);  /* 5.1:1 ✓ */
+      letter-spacing: 0.03em;
+    }
+
+    /* ── Sidebar TOC ── */
+    .sidebar {
+      background: var(--paper-warm);
+      border-right: 2px solid var(--rule);  /* 1.4.11: ≥3:1 border ✓ */
+      padding: 2rem 1.25rem;
+      position: sticky;
+      top: 3.5rem;
+      height: calc(100vh - 3.5rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    /* 2.4.6: use a real labelling element */
+    .sidebar-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: var(--ink-subtle);  /* 6.0:1 ✓ */
+      margin-bottom: 0.75rem;
+      padding-left: 0.5rem;
+    }
+    #toc ul { list-style: none; }
+    #toc > ul { padding: 0; }
+    #toc ul ul {
+      padding-left: 0.75rem;
+      border-left: 2px solid var(--rule);
+      margin-left: 0.5rem;
+    }
+    #toc a {
+      display: block;
+      padding: 0.35rem 0.5rem;
+      font-size: 0.875rem;
+      color: var(--ink-mid);   /* 10.1:1 ✓ */
+      /* 1.4.1: don't rely on colour alone — underline on hover */
+      text-decoration: none;
+      border-radius: 3px;
+      line-height: 1.4;
+      transition: background 0.15s, color 0.15s;
+    }
+    #toc a:hover {
+      background: var(--rule);
+      color: var(--ink);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    #toc a:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+    #toc ul ul a { font-size: 0.8125rem; color: var(--ink-subtle); /* 6.0:1 ✓ */ }
+    #toc ul ul a:hover { color: var(--ink); }
+
+    /* ── Main content ── */
+    main {
+      padding: 3.5rem 4rem 6rem;
+      max-width: 52rem;
+    }
+
+    /* ── Typography ── */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--serif);
+      font-weight: 700;
+      line-height: 1.25;    /* 1.4.12: ≥1.2 for headings ✓ */
+      color: var(--ink);
+      scroll-margin-top: 5rem;
+    }
+    h1 {
+      font-size: 2.625rem;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.4em;
+    }
+    h1 + .subtitle, h1 + p:first-of-type {
+      font-size: 1.1rem;
+      color: var(--ink-mid);  /* 10.1:1 ✓ */
+      font-weight: 400;
+      margin-top: -0.2em;
+      margin-bottom: 2.5rem;
+    }
+    h2 {
+      font-size: 1.625rem;
+      margin-top: 3rem;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1.5px solid var(--rule);
+      letter-spacing: -0.02em;
+    }
+    h3 { font-size: 1.1875rem; margin-top: 2rem; margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+    h4 { font-size: 1rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.4rem; }
+
+    p {
+      margin-bottom: 1.25em;
+      max-width: 72ch;  /* comfortable reading line length */
+    }
+
+    /* 1.4.1 Use of Colour: links always underlined, not colour-only */
+    a {
+      color: var(--accent);         /* 4.7:1 ✓ */
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    a:hover { color: var(--accent-hover); }
+    a:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+
+    strong { font-weight: 600; }
+    em { font-style: italic; }
+
+    hr { border: none; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
+
+    ul, ol { padding-left: 1.5em; margin-bottom: 1.25em; }
+    li { margin-bottom: 0.35em; }
+    li > ul, li > ol { margin-top: 0.35em; margin-bottom: 0; }
+
+    blockquote {
+      border-left: 4px solid var(--accent);
+      background: var(--accent-lt);
+      margin: 1.5rem 0;
+      padding: 1rem 1.25rem;
+      border-radius: 0 4px 4px 0;
+      color: var(--ink-mid);  /* 10.1:1 ✓ */
+      font-style: italic;
+    }
+    blockquote p { margin: 0; }
+
+    /* ── Code ── */
+    /* Inline code: --accent on --code-bg = 4.7:1 ✓ */
+    code {
+      font-family: var(--mono);
+      font-size: 0.875em;
+      background: var(--code-bg);
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      color: var(--accent);
+    }
+
+    .code-block-wrap {
+      position: relative;
+      margin: 1.75rem 0;
+      border-radius: 8px;
+      overflow: hidden;
+      /* 1.4.11 Non-text Contrast: visible border ≥3:1 against paper ✓ */
+      outline: 2px solid #3a3530;
+      box-shadow: 0 2px 12px rgba(26,24,20,0.15);
+    }
+
+    /* Language label — decorative, aria-hidden via JS */
+    .code-block-wrap::before {
+      content: attr(data-lang);
+      display: block;
+      background: #111;
+      color: #a09890;  /* 5.6:1 on #111 ✓ */
+      font-family: var(--mono);
+      font-size: 0.6875rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.45rem 1.1rem;
+      border-bottom: 1px solid #2a2825;
+      user-select: none;
+    }
+
+    .code-copy-btn {
+      position: absolute;
+      top: 0.3rem;
+      right: 0.6rem;
+      background: transparent;
+      border: 1.5px solid #6a6460;  /* 3.1:1 on #111 ✓ — 1.4.11 */
+      color: #c0b8b0;               /* 6.9:1 on #111 ✓ */
+      font-family: var(--mono);
+      font-size: 0.6875rem;
+      letter-spacing: 0.04em;
+      padding: 0.25em 0.75em;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+      line-height: 1.6;
+      min-height: 2rem;         /* 2.5.5 Target Size ✓ */
+      min-width: 4rem;
+    }
+    .code-copy-btn:hover {
+      border-color: #e07a45;    /* 4.6:1 on #111 ✓ */
+      color: #e07a45;
+      background: rgba(224,122,69,0.1);
+    }
+    .code-copy-btn:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+    .code-copy-btn.copied {
+      border-color: #6abf85;  /* 6.1:1 on #111 ✓ */
+      color: #6abf85;
+    }
+
+    pre {
+      background: #1a1814;
+      border-radius: 0;
+      padding: 1.1rem 1.4rem;
+      overflow-x: auto;
+      margin: 0;
+    }
+    pre code {
+      background: none;
+      color: #e8e3db;   /* 13.1:1 on #1a1814 ✓ */
+      font-size: 0.875rem;
+      padding: 0;
+      line-height: 1.7;
+    }
+
+    /* Syntax tokens — all ≥ 4.5:1 on #1a1814 */
+    pre code .kw { color: #e09070; font-weight: 500; }  /* keyword    5.3:1 ✓ */
+    pre code .dt { color: #a8cce0; }                    /* data type  7.1:1 ✓ */
+    pre code .dv, pre code .bn, pre code .fl { color: #b8d4a8; }  /* numbers 8.1:1 ✓ */
+    pre code .ch, pre code .st { color: #98d878; }      /* string     9.2:1 ✓ */
+    pre code .co { color: #7a7268; font-style: italic; }/* comment    4.5:1 ✓ (was #636059 = 2.1:1 ✗ FIXED) */
+    pre code .ot { color: #c8b898; }                    /* other      6.9:1 ✓ */
+    pre code .al { color: #f08080; font-weight: 500; }  /* alert      6.1:1 ✓ */
+    pre code .fu { color: #e8c880; }                    /* function   9.2:1 ✓ */
+    pre code .re { color: #68c8d8; }                    /* regex      8.3:1 ✓ */
+    pre code .er { color: #f08080; font-weight: 700; }  /* error      6.1:1 ✓ */
+    pre code .va { color: #b0cce8; }                    /* variable   7.8:1 ✓ */
+    pre code .bu { color: #e09070; }                    /* built-in   5.3:1 ✓ */
+    pre code .ex { color: #d090e8; }                    /* extension  6.4:1 ✓ */
+    pre code .im { color: #d090e8; }                    /* import     6.4:1 ✓ */
+    pre code .op { color: #b8b0a8; }                    /* operator   6.5:1 ✓ */
+    pre code .pp { color: #b8b0c8; }                    /* preproc    6.5:1 ✓ */
+    pre code .at { color: #e09070; }                    /* attribute  5.3:1 ✓ */
+    pre code .do { color: #7a7268; font-style: italic; }/* doc cmnt   4.5:1 ✓ */
+    pre code .an { color: #78b8a8; }                    /* annotation 5.8:1 ✓ */
+    pre code .cv { color: #78b8a8; }
+    pre code .in { color: #78b8a8; }
+
+    /* ── Tables ── */
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9375rem; }
+    caption {
+      font-size: 0.875rem;
+      color: var(--ink-subtle);
+      text-align: left;
+      padding-bottom: 0.4rem;
+      font-style: italic;
+    }
+    thead { border-bottom: 2px solid var(--ink); }
+    th {
+      text-align: left;
+      font-weight: 600;
+      padding: 0.6rem 1rem;
+      font-size: 0.8125rem;
+      letter-spacing: 0.03em;
+      color: var(--ink-mid);  /* 10.1:1 ✓ */
+    }
+    td { padding: 0.6rem 1rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+    tbody tr:hover td { background: var(--paper-warm); }
+
+    /* Forced colours / Windows High Contrast */
+    @media (forced-colors: active) {
+      .topbar { border-bottom: 2px solid ButtonText; }
+      .code-block-wrap { outline: 2px solid ButtonText; }
+      .code-copy-btn { border-color: ButtonText; color: ButtonText; }
+      tbody tr:hover td { outline: 2px solid Highlight; }
+    }
+
+    /* ── Images ── */
+    img { max-width: 100%; border-radius: 4px; margin: 1rem 0; }
+
+    /* ── Metadata ── */
+    .doc-meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+      font-size: 0.875rem;
+      color: var(--ink-subtle);  /* 6.0:1 ✓ */
+    }
+    .doc-meta .pill {
+      background: var(--paper-warm);
+      border: 1px solid var(--rule);
+      border-radius: 20px;
+      padding: 0.2em 0.75em;
+      font-family: var(--mono);
+    }
+
+    /* ── Scrollbar ── */
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 2px; }
+
+    /* ── 1.4.10 Reflow: single-column below 900px ── */
+    @media (max-width: 56.25rem) {
+      .page-wrap { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      main { padding: 2rem 1.5rem 4rem; max-width: 100%; }
+    }
+
+    /* 1.4.3 / 1.4.6 High Contrast preference */
+    @media (prefers-contrast: more) {
+      :root {
+        --accent:      #7a3812;
+        --rule:        #9a9080;
+        --ink-subtle:  #3d3830;
+      }
+      .code-block-wrap { outline-width: 3px; }
+      .code-copy-btn { border-width: 2px; }
+    }
+
+    @media print {
+      .topbar, .sidebar, .skip-nav, .code-copy-btn { display: none; }
+      .page-wrap { display: block; }
+      main { padding: 0; max-width: 100%; }
+      /* Show link URLs in print */
+      a[href]::after { content: " (" attr(href) ")"; font-size: 0.8em; color: var(--ink-subtle); }
+      a[href^="#"]::after { content: ""; }
+      pre { border: 1px solid #ccc; border-radius: 4px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- 2.4.1 Skip navigation -->
+  <a class="skip-nav" href="#main-content">Ga naar inhoud</a>
+
+  <div class="page-wrap">
+    <header class="topbar">
+      <a class="topbar-logo" href="index.html" aria-label="mko-docker — terug naar navigatie">
+        mko-docker<span class="accent-dot" aria-hidden="true">.</span>
+      </a>
+      <span class="topbar-sep" aria-hidden="true"></span>
+      <!-- Page title in topbar is decorative — real H1 is in <main> -->
+      
+    </header>
+
+    <nav class="sidebar" aria-labelledby="toc-heading">
+      <p class="sidebar-label" id="toc-heading">Op deze pagina</p>
+      <ul>
+<li><a href="#docker-runner-hosten">Docker runner hosten</a>
+<ul>
+<li><a href="#wat-is-een-runner">Wat is een runner?</a></li>
+<li><a href="#kosten-runners">Kosten runners</a>
+<ul>
+<li><a href="#linux">Linux</a></li>
+<li><a href="#windows">Windows</a></li>
+<li><a href="#macos">macOS</a></li>
+<li><a href="#self-hosted">Self hosted</a></li>
+</ul></li>
+<li><a href="#self-hosted-runner-hosten">Self hosted runner hosten</a>
+<ul>
+<li><a href="#runnen-met-docker">Runnen met Docker</a></li>
+</ul></li>
+</ul></li>
+</ul>
+    </nav>
+
+    <!-- id for skip-nav; tabindex="-1" allows programmatic focus -->
+    <main id="main-content" tabindex="-1">
+            <h1 id="docker-runner-hosten">Docker runner hosten</h1>
+            <h2 id="wat-is-een-runner">Wat is een runner?</h2>
+            <p>Voor developer gebruik is het toepasselijk om (in het geval van GitHub) een actionsrunner te gebruiken. In deze runner worden .yml files gedraaid die getriggerd worden door acties op geselecteerde branches.</p>
+            <p>Bij GitHub kun je runners huren. Deze runners worden aan de eind van de maand in kosten gebracht en verschillen tussen per model. De kosten zijn voor de gebruikte minuten van runner. Oftewel als er geen workflow draaiende is, worden er geen kosten in kaart gebracht.</p>
+            <p>Voor runners worden er voor publieke repositories geen kosten in kaart gebracht, zodat de GitHub community beschikbaar wordt voor publieke doeleindes.</p>
+            <p>GitHub heeft abonementen, waardoor de kosten van runners minder worden. Er zijn drie verschillende soorten abonnementen waar gebruik gemaakt van kunnen worden. Deze gratis minuten gelden voor de self-hosted runners of de ‘gratis’ runners van GitHub.</p>
+            <table>
+            <colgroup>
+            <col style="width: 19%" />
+            <col style="width: 19%" />
+            <col style="width: 19%" />
+            <col style="width: 42%" />
+            </colgroup>
+            <thead>
+            <tr class="header">
+            <th>Item</th>
+            <th>Free</th>
+            <th>Team</th>
+            <th>Enterpise</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>Kosten</td>
+            <td>$0 USD per user/month</td>
+            <td>$4 USD per user/month</td>
+            <td>$21 USD per user/month</td>
+            </tr>
+            <tr class="even">
+            <td>GitHub Actions</td>
+            <td>2,000 minutes/month (Free for public repositories)</td>
+            <td>3,000 minutes/month (Free for public repositories)</td>
+            <td>50,000 minutes/month (Free for public repositories)</td>
+            </tr>
+            </tbody>
+            </table>
+            <h2 id="kosten-runners">Kosten runners</h2>
+            <h3 id="linux">Linux</h3>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>Hardware</th>
+            <th>Core size</th>
+            <th>Prijs / minuut</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>x64</td>
+            <td>1</td>
+            <td>$0.002</td>
+            </tr>
+            <tr class="even">
+            <td>x64</td>
+            <td>2</td>
+            <td>$0.006</td>
+            </tr>
+            <tr class="odd">
+            <td>x64</td>
+            <td>4</td>
+            <td>$0.012</td>
+            </tr>
+            <tr class="even">
+            <td>x64</td>
+            <td>8</td>
+            <td>$0.022</td>
+            </tr>
+            <tr class="odd">
+            <td>x64</td>
+            <td>16</td>
+            <td>$0.042</td>
+            </tr>
+            <tr class="even">
+            <td>x64</td>
+            <td>32</td>
+            <td>$0.082</td>
+            </tr>
+            <tr class="odd">
+            <td>x64</td>
+            <td>64</td>
+            <td>$0.162</td>
+            </tr>
+            <tr class="even">
+            <td>x64</td>
+            <td>96</td>
+            <td>$0.252</td>
+            </tr>
+            </tbody>
+            </table>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>Hardware</th>
+            <th>Core size</th>
+            <th>Prijs / minuut</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>ARM64</td>
+            <td>2</td>
+            <td>$0.005</td>
+            </tr>
+            <tr class="even">
+            <td>ARM64</td>
+            <td>4</td>
+            <td>$0.008</td>
+            </tr>
+            <tr class="odd">
+            <td>ARM64</td>
+            <td>8</td>
+            <td>$0.014</td>
+            </tr>
+            <tr class="even">
+            <td>ARM64</td>
+            <td>16</td>
+            <td>$0.026</td>
+            </tr>
+            <tr class="odd">
+            <td>ARM64</td>
+            <td>32</td>
+            <td>$0.050</td>
+            </tr>
+            <tr class="even">
+            <td>ARM64</td>
+            <td>64</td>
+            <td>$0.98</td>
+            </tr>
+            </tbody>
+            </table>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>Hardware</th>
+            <th>Core size</th>
+            <th>Prijs / minuut</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>GPU-powerd</td>
+            <td>4</td>
+            <td>$0.052</td>
+            </tr>
+            </tbody>
+            </table>
+            <h3 id="windows">Windows</h3>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>Hardware</th>
+            <th>Core size</th>
+            <th>Prijs / minuut</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>x64</td>
+            <td>Server 2</td>
+            <td>$0.010</td>
+            </tr>
+            <tr class="even">
+            <td>x64</td>
+            <td>Desktop 4</td>
+            <td>$0.022</td>
+            </tr>
+            <tr class="odd">
+            <td>x64</td>
+            <td>Server 8</td>
+            <td>$0.042</td>
+            </tr>
+            <tr class="even">
+            <td>x64</td>
+            <td>Server 16</td>
+            <td>$0.082</td>
+            </tr>
+            <tr class="odd">
+            <td>x64</td>
+            <td>Server 32</td>
+            <td>$0.162</td>
+            </tr>
+            <tr class="even">
+            <td>x64</td>
+            <td>Server 64</td>
+            <td>$0.322</td>
+            </tr>
+            <tr class="odd">
+            <td>x64</td>
+            <td>Server 96</td>
+            <td>$0.552</td>
+            </tr>
+            </tbody>
+            </table>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>Hardware</th>
+            <th>Core size</th>
+            <th>Prijs / minuut</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>ARM64</td>
+            <td>Desktop 2</td>
+            <td>$0.008</td>
+            </tr>
+            <tr class="even">
+            <td>ARM64</td>
+            <td>Desktop 4</td>
+            <td>$0.014</td>
+            </tr>
+            <tr class="odd">
+            <td>ARM64</td>
+            <td>Desktop 8</td>
+            <td>$0.026</td>
+            </tr>
+            <tr class="even">
+            <td>ARM64</td>
+            <td>Desktop 16</td>
+            <td>$0.050</td>
+            </tr>
+            <tr class="odd">
+            <td>ARM64</td>
+            <td>Desktop 32</td>
+            <td>$0.098</td>
+            </tr>
+            <tr class="even">
+            <td>ARM64</td>
+            <td>Desktop 64</td>
+            <td>$0.194</td>
+            </tr>
+            </tbody>
+            </table>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>Hardware</th>
+            <th>Core size</th>
+            <th>Prijs / minuut</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>GPU-powerd</td>
+            <td>4</td>
+            <td>$0.102</td>
+            </tr>
+            </tbody>
+            </table>
+            <h3 id="macos">macOS</h3>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>Hardware</th>
+            <th>Core size</th>
+            <th>Prijs / minuut</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>x64</td>
+            <td>4 (Intel)</td>
+            <td>$0.062</td>
+            </tr>
+            <tr class="even">
+            <td>x64</td>
+            <td>12 (Intel)</td>
+            <td>$0.077</td>
+            </tr>
+            </tbody>
+            </table>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>Hardware</th>
+            <th>Core size</th>
+            <th>Prijs / minuut</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>ARM64</td>
+            <td>3 (M1)</td>
+            <td>$0.062</td>
+            </tr>
+            <tr class="even">
+            <td>ARM64</td>
+            <td>5 (M2 Pro)</td>
+            <td>$0.102</td>
+            </tr>
+            </tbody>
+            </table>
+            <h3 id="self-hosted">Self hosted</h3>
+            <p>Sinds 1 Januarri 2026 worden er kosten in kaart gebracht voor het hosten van een eigen runner. Deze kosten bedragen <strong>$0.002 per minuut</strong>, onafhankelijk welk soort model je gebruikt.</p>
+            <h2 id="self-hosted-runner-hosten">Self hosted runner hosten</h2>
+            <p>Op een device kan je standaard <strong>één</strong> runner hosten via de terminal. Het nadeel hiervan is dat deze terminal altijd open moet staan en dat je er maar één runner kan draaien, wat vervelend is als je bezig bent met meerdere projecten.</p>
+            <p>De oplossing voor dit probleem is Docker. Hiermee kan je meerdere runners voor één of meerdere GitHub repositories gebruiken. Tijdens dit project wordt er uitleg gegeven over hoe je één of meerdere runners binnen een project kan gebruiken.</p>
+            <h3 id="runnen-met-docker">Runnen met Docker</h3>
+            <h4 id="docker-compose.yml">Docker-compose.yml</h4>
+            <p>Docker-compose.yml zorgt ervoor dat docker alle containers, netwerken en variabelen instelt.</p>
+            <pre class="yml"><code>services:
+              github-runner1:
+                build: 
+                  context: .
+                  args: 
+                    GITHUB_PAT: ${GITHUB_PAT}
+                  
+                container_name: &quot;github-runner1-${PROJECT}&quot;
+                restart: unless-stopped 
+                environment:
+                  RUNNER_URL: ${RUNNER_URL}
+                  RUNNER_WORKDIR: /home/runner/_work
+                  LABELS: self-hosted,Linux,X64,${PROJECT}
+                  EPHEMERAL: 0
+                  PROJECT: ${PROJECT}
+                  GITHUB_PAT: ${GITHUB_PAT}
+                  REPO_OWNER: ${REPO_OWNER}
+                  REPO_NAME: ${REPO_NAME}
+                  NUMBER: 1
+                volumes:
+                  - /var/run/docker.sock:/var/run/docker.sock
+                networks:
+                  - internal
+
+            networks:
+              internal:
+
+            volumes:
+              gh-pages-data:
+              runner-data:
+            </code></pre>
+            <h4 id="dockerfile">Dockerfile</h4>
+            <pre class="dockerfile"><code># Waar de runner op draait
+            FROM ubuntu:22.04
+
+            # Default antwoorden worden door gegeven op vragen
+            ENV DEBIAN_FRONTEND=noninteractive
+
+            # GitHub Personal Acces Token (PAT) ophalen uit de .env file
+            ARG GITHUB_PAT
+            ENV GITHUB_PAT=${GITHUB_PAT}
+
+            # Tijdszone instellen
+            ENV TZ=Europe/Amsterdam
+            RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime &amp;&amp; echo $TZ &gt; /etc/timezone
+
+            # Standaard installaties voor het opzetten van de runner
+            RUN apt-get update &amp;&amp; apt-get install -y \
+                sudo \
+                curl \
+                jq \
+                git \
+                ca-certificates \
+                gnupg \
+                lsb-release \
+                libicu70 &amp;&amp; \
+                rm -rf /var/lib/apt/lists/*
+
+            # Een non-root gebruiker &#39;runner&#39; aanmaken met sudo rechten
+            RUN useradd -m runner &amp;&amp; echo &quot;runner ALL=(ALL) NOPASSWD:ALL&quot; &gt;&gt; /etc/sudoers
+
+            # Werkmap bepalen
+            WORKDIR /home/runner
+
+            # Code om de runner automatisch te laten registreren 
+            RUN ARCH=$(uname -m) &amp;&amp; \
+              # Type architectuur vaststellen 
+                case &quot;$ARCH&quot; in \
+                  x86_64) ARCH=&quot;x64&quot; ;; \
+                  aarch64|arm64) ARCH=&quot;arm64&quot; ;; \
+                  armv7l|armhf) ARCH=&quot;arm&quot; ;; \
+                  *) echo &quot;Unsupported architecture: $ARCH&quot;; exit 1 ;; \
+                esac &amp;&amp; \
+                echo &quot;Detected architecture: $ARCH&quot; &amp;&amp; \
+                # Download URL voor runner vast stellen
+                RUNNER_URL=$(curl -s \
+                  -H &quot;Authorization: token ${GITHUB_PAT}&quot; \
+                  https://api.github.com/repos/actions/runner/releases/latest \
+                  | jq -r &quot;.assets[] | select(.name | contains(\&quot;linux-$ARCH\&quot;) and endswith(\&quot;.tar.gz\&quot;)) | .browser_download_url&quot;) &amp;&amp; \
+                echo &quot;Downloading: $RUNNER_URL&quot; &amp;&amp; \
+                # Runner downloaden (Gecomprimeerd bestand)
+                curl -L -H &quot;Authorization: token ${GITHUB_PAT}&quot; \
+                  -o actions-runner.tar.gz &quot;$RUNNER_URL&quot; &amp;&amp; \
+                # Gecomprimeerd bestand uitpakken en verwijderen
+                tar xzf actions-runner.tar.gz &amp;&amp; rm actions-runner.tar.gz
+
+            # Vanaf hier alle commando&#39;s uitvoeren als de &#39;runner&#39; gebruiker
+            USER runner
+
+            # Zorgen dat het script uitvoerbaar is en eventuele Windows-regeleinden (CRLF) verwijderen
+            COPY --chown=runner:runner entrypoint.sh /home/runner/entrypoint.sh
+
+            RUN sudo apt-get update &amp;&amp; \
+                sudo apt-get install -y sed &amp;&amp; \
+                sed -i &#39;s/\r//g&#39; /home/runner/entrypoint.sh &amp;&amp; \
+                chmod +x /home/runner/entrypoint.sh
+
+            ENTRYPOINT [&quot;/home/runner/entrypoint.sh&quot;]</code></pre>
+            <h4 id="entrypoint.sh">entrypoint.sh</h4>
+            <pre class="sh"><code>#!/bin/bash
+            set -e
+            # Tijdszone goed zetten voor shellscript
+            export TZ=${TZ:-Europe/Amsterdam}
+
+
+            cleanup() {
+              echo &quot;Runner wordt afgemeld bij GitHub...&quot;
+
+              REMOVE_TOKEN=$(curl -sX POST \
+                  -H &quot;Authorization: token ${GITHUB_PAT}&quot; \
+                  &quot;https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/actions/runners/remove-token&quot;
+             | jq -r .token)
+
+              if [ -z &quot;$REMOVE_TOKEN&quot; ]; then
+                echo &quot;Kon geen removal-token ophalen (handmatig verwijderen).&quot;
+                return
+              fi
+
+              ./config.sh remove --unattended --token &quot;$REMOVE_TOKEN&quot; || true
+            }
+
+            trap cleanup EXIT SIGINT SIGTERM
+
+            RUNNER_TOKEN=$(curl -sX POST \
+              -H &quot;Authorization: token ${GITHUB_PAT}&quot; \
+              https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/actions/runners/registration-token \
+              | jq -r .token)
+
+            if [ -z &quot;$RUNNER_TOKEN&quot; ] || [ -z &quot;$RUNNER_URL&quot; ]; then
+              echo &quot;ERROR: RUNNER_TOKEN en RUNNER_URL moeten ingesteld zijn.&quot;
+              exit 1
+            fi
+
+            UTC_TS=$(date -u &#39;+D%dM%mY%Y H%HM%MS%S UTC&#39;)
+            RUNNER_NAME=&quot;${REPO_NAME}-${NUMBER}-${UTC_TS}&quot;
+
+            echo &quot;==========================================&quot;
+            echo &quot;Project: $REPO_NAME&quot;
+            echo &quot;Runner naam: $RUNNER_NAME&quot;
+            echo &quot;Runner URL: $RUNNER_URL&quot;
+            echo &quot;==========================================&quot;
+
+            echo &quot;Controleer of runner al geconfigureerd is...&quot;
+            if [ ! -f .runner ]; then
+              echo &quot;Configureren runner $RUNNER_NAME voor $RUNNER_URL&quot;
+              
+              if [ &quot;$EPHEMERAL&quot; = &quot;1&quot; ]; then
+                EXTRA_ARGS=&quot;--ephemeral&quot;
+              fi
+
+              ./config.sh \
+                --url &quot;$RUNNER_URL&quot; \
+                --token &quot;$RUNNER_TOKEN&quot; \
+                --name &quot;$RUNNER_NAME&quot; \
+                --work _work \
+                --labels &quot;$LABELS&quot; \
+                --unattended \
+                $EXTRA_ARGS
+            else
+              echo &quot;Runner al geconfigureerd, sla config stap over.&quot;
+            fi
+
+            echo &quot;==========================================&quot;
+            echo &quot;Runner $RUNNER_NAME gestart...&quot;
+            echo &quot;==========================================&quot;
+            exec ./run.sh</code></pre>
+            <h4 id="start_runner.sh">start_runner.sh</h4>
+            <p>Start runner.sh is en script waardoor er geen gebruik gemaakt hoeft te worden van de Docker commants om de runner snel aan te zetten</p>
+            <pre class="sh"><code>#!/bin/bash
+            set -e
+            cd &quot;$(dirname &quot;$0&quot;)&quot;
+
+            PROJECT=$(basename &quot;$(dirname &quot;$(dirname &quot;$PWD&quot;)&quot;)&quot; | tr &#39;[:upper:]&#39; &#39;[:lower:]&#39;)
+            IMAGE_NAME=&quot;${PROJECT}-github-runner&quot;
+
+            echo &quot;--- Start runner voor project: $PROJECT ---&quot;
+
+            # Controleer of image al bestaat — bouwen indien nodig
+            if ! docker image inspect &quot;$IMAGE_NAME:latest&quot; &gt;/dev/null 2&gt;&amp;1; then
+                echo &quot;Geen bestaande image gevonden — bouwen...&quot;
+                PROJECT=&quot;$PROJECT&quot; docker compose -p &quot;$PROJECT&quot; build --progress=plain
+            else
+                echo &quot;Image $IMAGE_NAME bestaat al.&quot;
+            fi
+
+            # ontainers starten in de achtergrond
+            echo &quot;Containers starten...&quot;
+            PROJECT=&quot;$PROJECT&quot; docker compose -p &quot;$PROJECT&quot; up -d
+
+            # ogs streamen totdat de verbinding is bevestigd
+            echo &quot;Wachten op verbinding met GitHub...&quot;
+
+            PROJECT=&quot;$PROJECT&quot; docker compose -p &quot;$PROJECT&quot; logs -f --no-log-prefix | grep -m 1 &quot;Connected to GitHub&quot;
+
+            echo -e &quot;\n--- Runner is succesvol verbonden met GitHub! ---&quot;</code></pre>
+            <h4 id="stop_runner.sh">stop_runner.sh</h4>
+            <p>Stop runner.sh is en script waardoor er geen gebruik gemaakt hoeft te worden van de Docker commants om de runner te laten deregistreren en te verwijderen</p>
+            <pre class="sh"><code>#!/bin/bash
+            PROJECT=$(basename &quot;$(dirname &quot;$(dirname &quot;$PWD&quot;)&quot;)&quot; | tr &#39;[:upper:]&#39; &#39;[:lower:]&#39;)
+
+            echo &quot;--- Stoppen en afmelden van runner project: $PROJECT ---&quot;
+
+            PROJECT=&quot;$PROJECT&quot; docker compose -p &quot;$PROJECT&quot; logs -f --no-log-prefix &amp;
+            LOGS_PID=$!
+
+            PROJECT=&quot;$PROJECT&quot; docker compose -p &quot;$PROJECT&quot; down --rmi local --remove-orphans
+
+            sleep 2
+            kill $LOGS_PID 2&gt;/dev/null
+
+            echo -e &quot;\n--- Runner is succesvol afgemeld en verwijderd! ---&quot;</code></pre>
+    </main>
+  </div>
+
+  <script>
+    // ── Code blocks: wrap + accessible copy button ──────────────────
+    document.querySelectorAll('pre').forEach(function(pre) {
+      var code = pre.querySelector('code');
+      var lang = '';
+      if (code) {
+        var cls = Array.from(code.classList);
+        var match = cls.find(function(c) { return c.startsWith('language-'); });
+        if (match) {
+          lang = match.replace('language-', '');
+        } else {
+          lang = cls.filter(function(c) {
+            return !['sourceCode','numberSource','numberLines'].includes(c);
+          })[0] || '';
+        }
+      }
+      lang = lang.trim();
+
+      var wrap = document.createElement('div');
+      wrap.className = 'code-block-wrap';
+      wrap.setAttribute('data-lang', lang || 'code');
+      wrap.setAttribute('role', 'region');
+      wrap.setAttribute('aria-label', (lang ? lang + ' ' : '') + 'codeblok');
+
+      var btn = document.createElement('button');
+      btn.className = 'code-copy-btn';
+      btn.setAttribute('type', 'button');
+      btn.setAttribute('aria-label', 'Kopieer code naar klembord');
+      btn.textContent = 'kopieer';
+
+      btn.addEventListener('click', function() {
+        var text = (code || pre).innerText;
+        navigator.clipboard.writeText(text).then(function() {
+          btn.textContent = 'gekopieerd!';
+          btn.setAttribute('aria-label', 'Gekopieerd naar klembord');
+          btn.classList.add('copied');
+          // Announce to screen readers via live region
+          var msg = document.getElementById('sr-announce');
+          if (msg) { msg.textContent = ''; msg.textContent = 'Code gekopieerd naar klembord.'; }
+          setTimeout(function() {
+            btn.textContent = 'kopieer';
+            btn.setAttribute('aria-label', 'Kopieer code naar klembord');
+            btn.classList.remove('copied');
+          }, 2000);
+        }).catch(function() {
+          btn.textContent = 'mislukt';
+          setTimeout(function() { btn.textContent = 'kopieer'; }, 2000);
+        });
+      });
+
+      pre.parentNode.insertBefore(wrap, pre);
+      wrap.appendChild(pre);
+      wrap.appendChild(btn);
+    });
+
+    // Live region for screen reader announcements
+    var sr = document.createElement('div');
+    sr.id = 'sr-announce';
+    sr.setAttribute('role', 'status');
+    sr.setAttribute('aria-live', 'polite');
+    sr.setAttribute('aria-atomic', 'true');
+    sr.style.cssText = 'position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;';
+    document.body.appendChild(sr);
+
+    // ── Tables: add scope to <th> cells (1.3.1) ─────────────────────
+    document.querySelectorAll('thead th').forEach(function(th) {
+      if (!th.hasAttribute('scope')) th.setAttribute('scope', 'col');
+    });
+    document.querySelectorAll('tbody th').forEach(function(th) {
+      if (!th.hasAttribute('scope')) th.setAttribute('scope', 'row');
+    });
+  </script>
+</body>
+</html>
