@@ -479,7 +479,7 @@ jobs:
 
             <div class="page-wrap">
               <header class="topbar">
-                <a class="topbar-logo" href="#" aria-label="$if(repo-name)$$repo-name$$else$Docs$endif$ — startpagina">
+                <a class="topbar-logo" href="index.html" aria-label="$if(repo-name)$$repo-name$$else$Docs$endif$ — terug naar navigatie">
                   $if(repo-name)$$repo-name$$else$Docs$endif$<span class="accent-dot" aria-hidden="true">.</span>
                 </a>
                 <span class="topbar-sep" aria-hidden="true"></span>
