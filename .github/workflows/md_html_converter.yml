@@ -632,3 +632,21 @@ jobs:
           git add docs/**/*.html 2>/dev/null || true
           git diff --cached --quiet || git commit -m "Auto-convert Markdown to HTML [styled]"
           git push
+  
+  github-pages:
+    permissions:
+      contents: write
+
+    runs-on: [self-hosted, Linux, X64, mko-docker]
+
+    needs: build
+
+    steps:
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/html
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
