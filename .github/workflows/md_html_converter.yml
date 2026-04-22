@@ -587,7 +587,7 @@ jobs:
       - name: Convert Markdown naar HTML
         run: |
           mkdir -p docs/html
-          TEMPLATE="docs/template.html"
+          TEMPLATE=".pandoc/doc-template.html"
           # Derive repo name from the GitHub repository variable (owner/repo → repo)
           REPO_NAME="${GITHUB_REPOSITORY##*/}"
  
