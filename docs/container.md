@@ -94,7 +94,7 @@ Via de terminal:
 ## Stap 5: Je webserver bekijken in de browser
 
 1. Open een webbrowser.
-2. Typ in de adresbalk `https://localhost:8080`.
+2. Typ in de adresbalk `http://localhost:8080`.
 3. Druk op Enter.
 
 Je ziet nu de welkomstpagina van nginx. Je webserver draait in een Docker-container op je eigen laptop/pc en is niet verbonden met de internet.
