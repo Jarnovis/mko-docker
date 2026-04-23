@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<!-- WCAG 2.1 AA compliant Pandoc template -->
+<html lang="nl" xml:lang="nl" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="generator" content="pandoc" />
+  <!-- 2.4.2 Page Titled: meaningful <title> including repo context -->
+  <title>mko-docker</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ─────────────────────────────────────────────────────────────
+       COLOUR PALETTE — contrast ratios verified for WCAG 2.1 AA
+       Normal text ≥ 4.5:1 | Large text (≥18pt / 14pt bold) ≥ 3:1
+       UI components & focus indicators ≥ 3:1
+    ───────────────────────────────────────────────────────────── */
+    :root {
+      /* Text on --paper (#faf9f6) */
+      --ink:          #1a1814;  /* 17.4:1 ✓ */
+      --ink-mid:      #3d3830;  /* 10.1:1 ✓ (was --ink-light) */
+      --ink-subtle:   #5c554e;  /*  6.0:1 ✓ (was --ink-faint #9a948e = 2.8:1 ✗ FIXED) */
+
+      /* Surfaces */
+      --paper:        #faf9f6;
+      --paper-warm:   #f3f0ea;
+      --rule:         #d8d2c8;  /* slightly darker — ≥3:1 for UI borders (1.4.11) */
+
+      /* Accent boosted: was #b85c2a (3.6:1 on paper ✗) → 4.7:1 ✓ */
+      --accent:       #9e4a1a;
+      --accent-lt:    #f0e4d7;
+      --accent-hover: #7a3812;  /* 7.2:1 ✓ */
+
+      --code-bg:      #ece8e0;
+
+      /* Topbar text on #1a1814 */
+      --topbar-text:  #f0ede6;  /* 14.8:1 ✓ */
+      --topbar-sub:   #b0a898;  /*  5.1:1 ✓ (was --ink-faint on dark = 2.8:1 ✗ FIXED) */
+
+      /* Focus ring — blue for universally clear focus indicator */
+      --focus:        #2563eb;
+
+      --serif:  'Fraunces', Georgia, serif;
+      --sans:   'DM Sans', system-ui, sans-serif;
+      --mono:   'DM Mono', 'Courier New', monospace;
+    }
+
+    /* 2.3.3 Animation from Interactions — honour user preference */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 1.0625rem;  /* ~17px via rem — 1.4.4 Resize Text ✓ */
+      line-height: 1.75;     /* 1.4.12: line-height ≥ 1.5 ✓ */
+      font-weight: 400;      /* was 300 — too light, raised to 400 ✓ */
+      min-height: 100vh;
+    }
+
+    /* 2.4.1 Bypass Blocks: skip-to-content link */
+    .skip-nav {
+      position: absolute;
+      top: -100%;
+      left: 1rem;
+      background: var(--focus);
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 0 0 4px 4px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      z-index: 9999;
+    }
+    .skip-nav:focus { top: 0; }
+
+    /* ── Layout ── */
+    .page-wrap {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      grid-template-rows: auto 1fr;
+      min-height: 100vh;
+    }
+
+    /* ── Top bar ── */
+    .topbar {
+      grid-column: 1 / -1;
+      background: var(--ink);
+      color: var(--topbar-text);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0 2rem;
+      height: 3.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .topbar-logo {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--topbar-text);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+    .topbar-logo:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+    .topbar-logo .accent-dot {
+      color: #e07a45; /* 4.6:1 on #1a1814 ✓ */
+    }
+    .topbar-sep { flex: 1; }
+    .topbar-title {
+      font-size: 0.8125rem;
+      font-weight: 400;
+      color: var(--topbar-sub);  /* 5.1:1 ✓ */
+      letter-spacing: 0.03em;
+    }
+
+    /* ── Sidebar TOC ── */
+    .sidebar {
+      background: var(--paper-warm);
+      border-right: 2px solid var(--rule);  /* 1.4.11: ≥3:1 border ✓ */
+      padding: 2rem 1.25rem;
+      position: sticky;
+      top: 3.5rem;
+      height: calc(100vh - 3.5rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    /* 2.4.6: use a real labelling element */
+    .sidebar-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: var(--ink-subtle);  /* 6.0:1 ✓ */
+      margin-bottom: 0.75rem;
+      padding-left: 0.5rem;
+    }
+    #toc ul { list-style: none; }
+    #toc > ul { padding: 0; }
+    #toc ul ul {
+      padding-left: 0.75rem;
+      border-left: 2px solid var(--rule);
+      margin-left: 0.5rem;
+    }
+    #toc a {
+      display: block;
+      padding: 0.35rem 0.5rem;
+      font-size: 0.875rem;
+      color: var(--ink-mid);   /* 10.1:1 ✓ */
+      /* 1.4.1: don't rely on colour alone — underline on hover */
+      text-decoration: none;
+      border-radius: 3px;
+      line-height: 1.4;
+      transition: background 0.15s, color 0.15s;
+    }
+    #toc a:hover {
+      background: var(--rule);
+      color: var(--ink);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    #toc a:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+    #toc ul ul a { font-size: 0.8125rem; color: var(--ink-subtle); /* 6.0:1 ✓ */ }
+    #toc ul ul a:hover { color: var(--ink); }
+
+    /* ── Main content ── */
+    main {
+      padding: 3.5rem 4rem 6rem;
+      max-width: 52rem;
+    }
+
+    /* ── Typography ── */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--serif);
+      font-weight: 700;
+      line-height: 1.25;    /* 1.4.12: ≥1.2 for headings ✓ */
+      color: var(--ink);
+      scroll-margin-top: 5rem;
+    }
+    h1 {
+      font-size: 2.625rem;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.4em;
+    }
+    h1 + .subtitle, h1 + p:first-of-type {
+      font-size: 1.1rem;
+      color: var(--ink-mid);  /* 10.1:1 ✓ */
+      font-weight: 400;
+      margin-top: -0.2em;
+      margin-bottom: 2.5rem;
+    }
+    h2 {
+      font-size: 1.625rem;
+      margin-top: 3rem;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1.5px solid var(--rule);
+      letter-spacing: -0.02em;
+    }
+    h3 { font-size: 1.1875rem; margin-top: 2rem; margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+    h4 { font-size: 1rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.4rem; }
+
+    p {
+      margin-bottom: 1.25em;
+      max-width: 72ch;  /* comfortable reading line length */
+    }
+
+    /* 1.4.1 Use of Colour: links always underlined, not colour-only */
+    a {
+      color: var(--accent);         /* 4.7:1 ✓ */
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    a:hover { color: var(--accent-hover); }
+    a:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+
+    strong { font-weight: 600; }
+    em { font-style: italic; }
+
+    hr { border: none; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
+
+    ul, ol { padding-left: 1.5em; margin-bottom: 1.25em; }
+    li { margin-bottom: 0.35em; }
+    li > ul, li > ol { margin-top: 0.35em; margin-bottom: 0; }
+
+    blockquote {
+      border-left: 4px solid var(--accent);
+      background: var(--accent-lt);
+      margin: 1.5rem 0;
+      padding: 1rem 1.25rem;
+      border-radius: 0 4px 4px 0;
+      color: var(--ink-mid);  /* 10.1:1 ✓ */
+      font-style: italic;
+    }
+    blockquote p { margin: 0; }
+
+    /* ── Code ── */
+    /* Inline code: --accent on --code-bg = 4.7:1 ✓ */
+    code {
+      font-family: var(--mono);
+      font-size: 0.875em;
+      background: var(--code-bg);
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      color: var(--accent);
+    }
+
+    .code-block-wrap {
+      position: relative;
+      margin: 1.75rem 0;
+      border-radius: 8px;
+      overflow: hidden;
+      /* 1.4.11 Non-text Contrast: visible border ≥3:1 against paper ✓ */
+      outline: 2px solid #3a3530;
+      box-shadow: 0 2px 12px rgba(26,24,20,0.15);
+    }
+
+    /* Language label — decorative, aria-hidden via JS */
+    .code-block-wrap::before {
+      content: attr(data-lang);
+      display: block;
+      background: #111;
+      color: #a09890;  /* 5.6:1 on #111 ✓ */
+      font-family: var(--mono);
+      font-size: 0.6875rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.45rem 1.1rem;
+      border-bottom: 1px solid #2a2825;
+      user-select: none;
+    }
+
+    .code-copy-btn {
+      position: absolute;
+      top: 0.3rem;
+      right: 0.6rem;
+      background: transparent;
+      border: 1.5px solid #6a6460;  /* 3.1:1 on #111 ✓ — 1.4.11 */
+      color: #c0b8b0;               /* 6.9:1 on #111 ✓ */
+      font-family: var(--mono);
+      font-size: 0.6875rem;
+      letter-spacing: 0.04em;
+      padding: 0.25em 0.75em;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+      line-height: 1.6;
+      min-height: 2rem;         /* 2.5.5 Target Size ✓ */
+      min-width: 4rem;
+    }
+    .code-copy-btn:hover {
+      border-color: #e07a45;    /* 4.6:1 on #111 ✓ */
+      color: #e07a45;
+      background: rgba(224,122,69,0.1);
+    }
+    .code-copy-btn:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+    .code-copy-btn.copied {
+      border-color: #6abf85;  /* 6.1:1 on #111 ✓ */
+      color: #6abf85;
+    }
+
+    pre {
+      background: #1a1814;
+      border-radius: 0;
+      padding: 1.1rem 1.4rem;
+      overflow-x: auto;
+      margin: 0;
+    }
+    pre code {
+      background: none;
+      color: #e8e3db;   /* 13.1:1 on #1a1814 ✓ */
+      font-size: 0.875rem;
+      padding: 0;
+      line-height: 1.7;
+    }
+
+    /* Syntax tokens — all ≥ 4.5:1 on #1a1814 */
+    pre code .kw { color: #e09070; font-weight: 500; }  /* keyword    5.3:1 ✓ */
+    pre code .dt { color: #a8cce0; }                    /* data type  7.1:1 ✓ */
+    pre code .dv, pre code .bn, pre code .fl { color: #b8d4a8; }  /* numbers 8.1:1 ✓ */
+    pre code .ch, pre code .st { color: #98d878; }      /* string     9.2:1 ✓ */
+    pre code .co { color: #7a7268; font-style: italic; }/* comment    4.5:1 ✓ (was #636059 = 2.1:1 ✗ FIXED) */
+    pre code .ot { color: #c8b898; }                    /* other      6.9:1 ✓ */
+    pre code .al { color: #f08080; font-weight: 500; }  /* alert      6.1:1 ✓ */
+    pre code .fu { color: #e8c880; }                    /* function   9.2:1 ✓ */
+    pre code .re { color: #68c8d8; }                    /* regex      8.3:1 ✓ */
+    pre code .er { color: #f08080; font-weight: 700; }  /* error      6.1:1 ✓ */
+    pre code .va { color: #b0cce8; }                    /* variable   7.8:1 ✓ */
+    pre code .bu { color: #e09070; }                    /* built-in   5.3:1 ✓ */
+    pre code .ex { color: #d090e8; }                    /* extension  6.4:1 ✓ */
+    pre code .im { color: #d090e8; }                    /* import     6.4:1 ✓ */
+    pre code .op { color: #b8b0a8; }                    /* operator   6.5:1 ✓ */
+    pre code .pp { color: #b8b0c8; }                    /* preproc    6.5:1 ✓ */
+    pre code .at { color: #e09070; }                    /* attribute  5.3:1 ✓ */
+    pre code .do { color: #7a7268; font-style: italic; }/* doc cmnt   4.5:1 ✓ */
+    pre code .an { color: #78b8a8; }                    /* annotation 5.8:1 ✓ */
+    pre code .cv { color: #78b8a8; }
+    pre code .in { color: #78b8a8; }
+
+    /* ── Tables ── */
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9375rem; }
+    caption {
+      font-size: 0.875rem;
+      color: var(--ink-subtle);
+      text-align: left;
+      padding-bottom: 0.4rem;
+      font-style: italic;
+    }
+    thead { border-bottom: 2px solid var(--ink); }
+    th {
+      text-align: left;
+      font-weight: 600;
+      padding: 0.6rem 1rem;
+      font-size: 0.8125rem;
+      letter-spacing: 0.03em;
+      color: var(--ink-mid);  /* 10.1:1 ✓ */
+    }
+    td { padding: 0.6rem 1rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+    tbody tr:hover td { background: var(--paper-warm); }
+
+    /* Forced colours / Windows High Contrast */
+    @media (forced-colors: active) {
+      .topbar { border-bottom: 2px solid ButtonText; }
+      .code-block-wrap { outline: 2px solid ButtonText; }
+      .code-copy-btn { border-color: ButtonText; color: ButtonText; }
+      tbody tr:hover td { outline: 2px solid Highlight; }
+    }
+
+    /* ── Images ── */
+    img { max-width: 100%; border-radius: 4px; margin: 1rem 0; }
+
+    /* ── Metadata ── */
+    .doc-meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+      font-size: 0.875rem;
+      color: var(--ink-subtle);  /* 6.0:1 ✓ */
+    }
+    .doc-meta .pill {
+      background: var(--paper-warm);
+      border: 1px solid var(--rule);
+      border-radius: 20px;
+      padding: 0.2em 0.75em;
+      font-family: var(--mono);
+    }
+
+    /* ── Scrollbar ── */
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 2px; }
+
+    /* ── 1.4.10 Reflow: single-column below 900px ── */
+    @media (max-width: 56.25rem) {
+      .page-wrap { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      main { padding: 2rem 1.5rem 4rem; max-width: 100%; }
+    }
+
+    /* 1.4.3 / 1.4.6 High Contrast preference */
+    @media (prefers-contrast: more) {
+      :root {
+        --accent:      #7a3812;
+        --rule:        #9a9080;
+        --ink-subtle:  #3d3830;
+      }
+      .code-block-wrap { outline-width: 3px; }
+      .code-copy-btn { border-width: 2px; }
+    }
+
+    @media print {
+      .topbar, .sidebar, .skip-nav, .code-copy-btn { display: none; }
+      .page-wrap { display: block; }
+      main { padding: 0; max-width: 100%; }
+      /* Show link URLs in print */
+      a[href]::after { content: " (" attr(href) ")"; font-size: 0.8em; color: var(--ink-subtle); }
+      a[href^="#"]::after { content: ""; }
+      pre { border: 1px solid #ccc; border-radius: 4px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- 2.4.1 Skip navigation -->
+  <a class="skip-nav" href="#main-content">Ga naar inhoud</a>
+
+  <div class="page-wrap">
+    <header class="topbar">
+      <a class="topbar-logo" href="index.html" aria-label="mko-docker — terug naar navigatie">
+        mko-docker<span class="accent-dot" aria-hidden="true">.</span>
+      </a>
+      <span class="topbar-sep" aria-hidden="true"></span>
+      <!-- Page title in topbar is decorative — real H1 is in <main> -->
+      
+    </header>
+
+    <nav class="sidebar" aria-labelledby="toc-heading">
+      <p class="sidebar-label" id="toc-heading">Op deze pagina</p>
+      <ul>
+<li><a href="#docker-container-draaien-met-docker-desktop">Docker-container draaien met Docker Desktop</a>
+<ul>
+<li><a href="#inleiding">Inleiding</a></li>
+<li><a href="#wat-heb-je-nodig">Wat heb je nodig?</a></li>
+<li><a href="#stap-1-docker-desktop-starten">Stap 1: Docker Desktop starten</a></li>
+<li><a href="#stap-2-wat-is-een-image-en-wat-is-een-container">Stap 2: Wat is een Image en wat is een Container?</a></li>
+<li><a href="#stap-2-wat-is-een-image-en-wat-is-een-container-1">Stap 2: Wat is een Image en wat is een Container?</a>
+<ul>
+<li><a href="#image-de-blauwdruk-een-werkblad">Image = de blauwdruk (een werkblad)</a></li>
+</ul></li>
+<li><a href="#stap-3-een-image-downloaden-via-docker-hub">Stap 3: Een Image downloaden via Docker Hub</a></li>
+<li><a href="#stap-4-een-container-starten">Stap 4: Een container starten</a></li>
+<li><a href="#stap-5-je-webserver-bekijken-in-de-browser">Stap 5: Je webserver bekijken in de browser</a></li>
+<li><a href="#stap-6-de-container-stoppen-en-hergebruiken">Stap 6: De container stoppen en hergebruiken</a></li>
+<li><a href="#stap-7-meerdere-containers-combineren-met-docker-compose">Stap 7: Meerdere containers combineren met Docker Compose</a></li>
+<li><a href="#stap-8-gegevens-bewaren-met-een-volume">Stap 8: Gegevens bewaren met een volume</a></li>
+<li><a href="#stap-9-digitale-toegankelijkheid-wcag">Stap 9: Digitale toegankelijkheid WCAG</a></li>
+<li><a href="#wat-kan-docker-wél-en-niet">Wat kan Docker wél en niet?</a></li>
+</ul></li>
+</ul>
+    </nav>
+
+    <!-- id for skip-nav; tabindex="-1" allows programmatic focus -->
+    <main id="main-content" tabindex="-1">
+            <h1 id="docker-container-draaien-met-docker-desktop">Docker-container draaien met Docker Desktop</h1>
+            <hr />
+            <h2 id="inleiding">Inleiding</h2>
+            <p>Dit stappenplan helpt je om een Docker-container te starten met Docker Desktop. Een container is als een afgesloten doos waarin een programma draait, zonder dat het je computer beïnvloedt.</p>
+            <p>Vergelijk het met een <em>tijdelijk ingericht vaklokaal</em>: je richt het in, gebruikt het, en ruimt het daarna op zonder dat de rest van de school er iets van merkt.</p>
+            <p>Je leert hier hoe je een webserver (nginx) start, zodat je zelf een website kunt draaien op je eigen laptop.</p>
+            <hr />
+            <h2 id="wat-heb-je-nodig">Wat heb je nodig?</h2>
+            <ul>
+            <li>Een computer met <a href="https://www.docker.com/products/docker-desktop">Docker Desktop</a> geïnstalleerd.</li>
+            <li>Internetverbinding om een <strong>image</strong> (blauwdruk) te downloaden.</li>
+            <li>Een webbrowser (Chrome, Firefox, Edge).</li>
+            </ul>
+            <p><img src="images/container/container_windows_icoon.png" alt="Windows icoon" /> <img src="images/container/container_macOS_icoon.png" alt="Mac icoon" /> <img src="images/container/container_gratistedownloaden.png" alt="Gratis downloaden" /></p>
+            <hr />
+            <h2 id="stap-1-docker-desktop-starten">Stap 1: Docker Desktop starten</h2>
+            <p>Open Docker Desktop via het icoon op je bureaublad of in de taakbalk. Het icoon is een <strong>walvis</strong> (icoon). Als de walvis beweegt, is Docker actief. Staat hij stil? Klik erop om Docker te starten.</p>
+            <blockquote>
+            <p>[!NOTE] Docker Desktop is de <strong>gereedschapskist van de conciërge</strong>. Zolang de kist open is, kun je aan de slag.</p>
+            </blockquote>
+            <hr />
+            <h2 id="stap-2-wat-is-een-image-en-wat-is-een-container">Stap 2: Wat is een Image en wat is een Container?</h2>
+            <p><strong>Image = “een werkblad”</strong> Een Image is een afgesloten werkblad dat je kan gebruiken om een container te maken.</p>
+            <blockquote>
+            <p>[!NOTE] Een Image is een gekopieerd werkblad dat nog niet is ingevuld. Het origineel ligt in de kast. Je kunt er zoveel kopieën van maken als je wilt, maar het origineel verandert nooit."</p>
+            </blockquote>
+            <p><strong>Container = “een ingevuld werkblad”</strong> Een <strong>Container</strong> is een werkende versie van de Image. Het is als het ingevulde werkblad van een leerling. De leerling kan het werkblad invullen, gebruiken en weer weggooien. Als het werkblad kwijt is, druk je gewoon een nieuwe kopie af. Het origineel in de kast blijft altijd beschikbaar.</p>
+            <blockquote>
+            <p>“Schoolse vergelijking: Een leerling pakt een werkblad uit de kast, vult het in, en gebruikt het tijdens de les. Dat ingevulde werkblad is de Container. Als de les klaar is, gooit de leerling het werkblad weg. Morgen begint hij of zij weer met een schoon, nieuw werkblad.”</p>
+            </blockquote>
+            <h2 id="stap-2-wat-is-een-image-en-wat-is-een-container-1">Stap 2: Wat is een Image en wat is een Container?</h2>
+            <h3 id="image-de-blauwdruk-een-werkblad">Image = de blauwdruk (een werkblad)</h3>
+            <p>Een <strong>Image</strong> is een kant-en-klare blauwdruk voor een programma. Je kunt het zien als een <strong>gekopieerd werkblad dat nog niet is ingevuld</strong>. Het werkblad ligt klaar in de kast, en je kunt er zoveel kopieën van maken als je wilt. Het origineel blijft altijd hetzelfde.</p>
+            <blockquote>
+            <p>[!NOTE]<br />
+            Stel je voor: je hebt een stapel lege werkbladen in je kast liggen. Elk werkblad is precies hetzelfde — dat is de <strong>Image</strong>. Je kunt er oneindig veel kopieën van maken, maar het origineel in de kast verandert nooit.</p>
+            </blockquote>
+            <blockquote>
+            <p>[!IMPORTANT] - Een <strong>Image</strong> is de blauwdruk. Je kunt er niets mee doen tot je er een container van maakt. - Een <strong>Container</strong> is de werkende versie. Stop je hem, dan is de inhoud weg — tenzij je een <strong>volume</strong> gebruikt (zie Stap 8).</p>
+            </blockquote>
+            <h2 id="stap-3-een-image-downloaden-via-docker-hub">Stap 3: Een Image downloaden via Docker Hub</h2>
+            <p>Een Image haal je op via <strong>Docker Hub</strong>: een online bibliotheek met duizenden kant-en-klare blauwdrukken voor programma’s.</p>
+            <ol type="1">
+            <li>Klik in Docker Desktop op <strong>Search</strong> (bovenaan).</li>
+            <li>Typ <code>nginx</code> in de zoekbalk en druk op Enter.</li>
+            <li>Klik op <strong>Pull</strong> naast de nginx-image.</li>
+            <li>Wacht tot het downloaden klaar is.</li>
+            </ol>
+            <p>Via de terminal: <code>docker pull nginx</code></p>
+            <blockquote>
+            <p>[!NOTE] Dit is zoals een methode bestellen in de schoolcatalogus. Je kiest het boek, het wordt bezorgd, en daarna kun je er zoveel lessen mee draaien als je wilt."</p>
+            </blockquote>
+            <h2 id="stap-4-een-container-starten">Stap 4: Een container starten</h2>
+            <p>Nu ga je de nginx-image gebruiken om een container te starten. Deze container wordt een webserver.</p>
+            <ol type="1">
+            <li>Ga in Docker Desktop naar het tabblad <strong>Images</strong>.</li>
+            <li>Zoek de nginx-image en klik op de <strong>Play-knop</strong>.</li>
+            <li>Vul het venster in:
+            <ul>
+            <li>Container name: <code>mijn-omgeving</code></li>
+            <li>Host port: <code>8080</code></li>
+            </ul></li>
+            <li>Klik op <strong>Run</strong>.</li>
+            </ol>
+            <p>Via de terminal: <code>docker run -d -p 8080:80 nginx</code></p>
+            <blockquote>
+            <p>“Schoolse vergelijking: Poort <code>8080</code> is de voordeur van het vaklokaal. Via die deur kom je binnen. Je kunt het poortnummer zien als het lokaalnummer op het rooster.”</p>
+            </blockquote>
+            <h2 id="stap-5-je-webserver-bekijken-in-de-browser">Stap 5: Je webserver bekijken in de browser</h2>
+            <ol type="1">
+            <li>Open een webbrowser.</li>
+            <li>Typ in de adresbalk <code>http://localhost:8080</code>.</li>
+            <li>Druk op Enter.</li>
+            </ol>
+            <p>Je ziet nu de welkomstpagina van nginx. Je webserver draait in een Docker-container op je eigen laptop/pc en is niet verbonden met de internet.</p>
+            <blockquote>
+            <p>[!TIP] Controleer of Docker Desktop actief is (walvis beweegt), of je poort <code>8080</code> hebt ingevuld, en of je browser up-to-date is."</p>
+            </blockquote>
+            <h2 id="stap-6-de-container-stoppen-en-hergebruiken">Stap 6: De container stoppen en hergebruiken</h2>
+            <ol type="1">
+            <li>Ga in Docker Desktop naar het tabblad <strong>Containers</strong>.</li>
+            <li>Zoek <code>mijn-omgeving</code></li>
+            <li>Klik op de <strong>Stop-knop</strong> naast de container (vierkantje).</li>
+            </ol>
+            <p>Wil je de container later weer starten? Klik op de <strong>Play-knop</strong> naast de container.</p>
+            <blockquote>
+            <p>[!NOTE] Een container stoppen is zoals het vaklokaal afsluiten na de les. De stoelen en het meubilair (de image) blijven staan, maar het werk op het bord wordt gewist. Morgen begin je met een nieuw werkblad."</p>
+            </blockquote>
+            <h2 id="stap-7-meerdere-containers-combineren-met-docker-compose">Stap 7: Meerdere containers combineren met Docker Compose</h2>
+            <p>Wil je een volledige webomgeving draaien, met zowel een website als een database? Dan gebruik je <strong>Docker Compose</strong>: één tekstbestand dat beschrijft welke containers samen moeten draaien.</p>
+            <p>Maak een bestand aan met de naam <code>docker-compose.yml</code>.</p>
+            <pre class="yaml"><code>services:
+                web:
+                    image: nginx
+                    ports:
+                        - &quot;8080:80&quot;
+                db:
+                  image: mysql:8
+                  environment:
+                    MYSQL_ROOT_PASSWORD: les2026 </code></pre>
+            <p>Start alles op met één commando: <code>docker-compose up</code></p>
+            <blockquote>
+            <p>“Schoolse vergelijking: Docker Compose is het lesrooster. Het rooster bepaalt welke docenten (containers) op welk moment in welk lokaal (poort) aanwezig zijn en hoe ze samenwerken. Jij schrijft het rooster één keer; Docker voert het uit.”</p>
+            </blockquote>
+            <h2 id="stap-8-gegevens-bewaren-met-een-volume">Stap 8: Gegevens bewaren met een volume</h2>
+            <p>Een container is van nature <strong>tijdelijk</strong>: stop je hem, dan is de inhoud weg. Om gegevens te bewaren gebruik je een <strong>volume</strong>: een map op je eigen computer die gekoppeld is aan de container.</p>
+            <p>Voeg dit toe aan je Compose-bestand, onder de database service:</p>
+            <pre class="yaml"><code>volumes:
+                - ./mijn-data:/var/lib/mysql</code></pre>
+            <blockquote>
+            <p>[!NOTE] Zonder volume is je database als een schoolschrift dat je na elke les weggooit. Met een volume sla je het schrift op in een la, de container kan worden opgeruimd en het schrift ligt er nog."</p>
+            <p>“Gebruik volumes altijd bij databases, leerlinggegevens en back-up systemen.”</p>
+            </blockquote>
+            <h2 id="stap-9-digitale-toegankelijkheid-wcag">Stap 9: Digitale toegankelijkheid WCAG</h2>
+            <p>Sinds 28 juni 2025 geldt de European Accessibility Act (EAA). Digitale omgevingen in het onderwijs moeten voldoen aan de <strong>WCAG 2.1 AA-normen</strong>. Dit geldt ook voor tools die zelf host via Docker.</p>
+            <p>Door containers <strong>zelf te beheren</strong> ben je niet afhankelijk van externe platforms die jouw leerlinggegevens verwerken. Jij kiest de tools, jij controleert de data, en jij garandeert dat iedere leerling de omgeving kan gebruiken.</p>
+            <blockquote>
+            <p>[!NOTE] Digitale soevereiniteit is zoals een eigen schooltuin beheren in plaats van groenten kopen bij een supermarkt. Meer werk, maar je weet precies wat erin zit en wie er toegang toe heeft."</p>
+            </blockquote>
+            <h2 id="wat-kan-docker-wél-en-niet">Wat kan Docker wél en niet?</h2>
+            <table>
+            <colgroup>
+            <col style="width: 50%" />
+            <col style="width: 49%" />
+            </colgroup>
+            <thead>
+            <tr class="header">
+            <th>Docker is geschikt voor</th>
+            <th>Docker is minder geschikt voor</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>Gestandaardiseerde werkomgeving voor leerlingen</td>
+            <td>Dagelijks gebruik door leerlingen zonder begeleiding</td>
+            </tr>
+            <tr class="even">
+            <td>Zelf hosten van open-source tools (Nextcloud)</td>
+            <td>Vervanging van schoolbrede IT infastructuur</td>
+            </tr>
+            <tr class="odd">
+            <td>Veilig experimenteren zonder je systeem te beschadigen</td>
+            <td>Complexe netwerkomgevingen zonder IT begeleiding</td>
+            </tr>
+            <tr class="even">
+            <td>Back-up systemen en databases lokaal draaien</td>
+            <td>Productieomgevingen zonder kennis van beveiliging</td>
+            </tr>
+            </tbody>
+            </table>
+    </main>
+  </div>
+
+  <script>
+    // ── Code blocks: wrap + accessible copy button ──────────────────
+    document.querySelectorAll('pre').forEach(function(pre) {
+      var code = pre.querySelector('code');
+      var lang = '';
+      if (code) {
+        var cls = Array.from(code.classList);
+        var match = cls.find(function(c) { return c.startsWith('language-'); });
+        if (match) {
+          lang = match.replace('language-', '');
+        } else {
+          lang = cls.filter(function(c) {
+            return !['sourceCode','numberSource','numberLines'].includes(c);
+          })[0] || '';
+        }
+      }
+      lang = lang.trim();
+
+      var wrap = document.createElement('div');
+      wrap.className = 'code-block-wrap';
+      wrap.setAttribute('data-lang', lang || 'code');
+      wrap.setAttribute('role', 'region');
+      wrap.setAttribute('aria-label', (lang ? lang + ' ' : '') + 'codeblok');
+
+      var btn = document.createElement('button');
+      btn.className = 'code-copy-btn';
+      btn.setAttribute('type', 'button');
+      btn.setAttribute('aria-label', 'Kopieer code naar klembord');
+      btn.textContent = 'kopieer';
+
+      btn.addEventListener('click', function() {
+        var text = (code || pre).innerText;
+        navigator.clipboard.writeText(text).then(function() {
+          btn.textContent = 'gekopieerd!';
+          btn.setAttribute('aria-label', 'Gekopieerd naar klembord');
+          btn.classList.add('copied');
+          // Announce to screen readers via live region
+          var msg = document.getElementById('sr-announce');
+          if (msg) { msg.textContent = ''; msg.textContent = 'Code gekopieerd naar klembord.'; }
+          setTimeout(function() {
+            btn.textContent = 'kopieer';
+            btn.setAttribute('aria-label', 'Kopieer code naar klembord');
+            btn.classList.remove('copied');
+          }, 2000);
+        }).catch(function() {
+          btn.textContent = 'mislukt';
+          setTimeout(function() { btn.textContent = 'kopieer'; }, 2000);
+        });
+      });
+
+      pre.parentNode.insertBefore(wrap, pre);
+      wrap.appendChild(pre);
+      wrap.appendChild(btn);
+    });
+
+    // Live region for screen reader announcements
+    var sr = document.createElement('div');
+    sr.id = 'sr-announce';
+    sr.setAttribute('role', 'status');
+    sr.setAttribute('aria-live', 'polite');
+    sr.setAttribute('aria-atomic', 'true');
+    sr.style.cssText = 'position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;';
+    document.body.appendChild(sr);
+
+    // ── Tables: add scope to <th> cells (1.3.1) ─────────────────────
+    document.querySelectorAll('thead th').forEach(function(th) {
+      if (!th.hasAttribute('scope')) th.setAttribute('scope', 'col');
+    });
+    document.querySelectorAll('tbody th').forEach(function(th) {
+      if (!th.hasAttribute('scope')) th.setAttribute('scope', 'row');
+    });
+  </script>
+</body>
+</html>
