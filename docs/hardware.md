@@ -1,6 +1,6 @@
 # Minimale vereisten voor Docker Desktop
 
-:contentReference[oaicite:0]{index=0} vereist een aantal hardware- en softwarevoorwaarden om correct te functioneren. Hieronder vind je de minimale vereisten per platform.
+Docker vereist een aantal hardware- en softwarevoorwaarden om correct te functioneren. Hieronder vind je de minimale vereisten per platform.
 
 ---
 
@@ -57,7 +57,7 @@
 
 ---
 
-## ⚙️ Algemene vereisten (alle platforms)
+## Algemene vereisten (alle platforms)
 
 - 64-bit CPU (geen 32-bit ondersteuning)
 - Hardware virtualisatie moet ingeschakeld zijn
