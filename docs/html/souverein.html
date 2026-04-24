@@ -463,18 +463,27 @@
     <nav class="sidebar" aria-labelledby="toc-heading">
       <p class="sidebar-label" id="toc-heading">Op deze pagina</p>
       <ul>
-<li><a href="#navigatie">Navigatie</a></li>
+<li><a href="#hoe-jij-nu-souverein-bent">Hoe jij nu souverein bent</a>
+<ul>
+<li><a href="#netwerken-het-intercom-systeem">Netwerken (Het intercom systeem)</a></li>
+</ul></li>
 </ul>
     </nav>
 
     <!-- id for skip-nav; tabindex="-1" allows programmatic focus -->
     <main id="main-content" tabindex="-1">
-            <h1 id="navigatie">Navigatie</h1>
+            <h1 id="hoe-jij-nu-souverein-bent">Hoe jij nu souverein bent</h1>
             <ul>
-            <li><a href="./container.html">Documentatie container</a></li>
-            <li><a href="./souverein.html">Documentatie souvereiniteit</a></li>
-            <li><a href="./runner.html">Documentatie runner</a></li>
+            <li>[] Introductie</li>
+            <li>[] Wat is een netwerk</li>
+            <li>[] Jouw data prive en souverein</li>
+            <li>[] Voorbeelden van wat je met deze vaardigheden kan draaien</li>
+            <li>[] De volgende stap: een server</li>
             </ul>
+            <p>Je kent nu de <a href="./container.html">basis van containers</a>, maar welke rol speelt dit precies in jouw digitale souvereiniteit? Hiermee bedoelen we je digitale onafhankelijkheid van andere partijen. Denk hierbij aan bedrijven zoals Google, Microsoft en Apple. Om dit te begrijpen kijken we naar een aantal elementen.</p>
+            <h2 id="netwerken-het-intercom-systeem">Netwerken (Het intercom systeem)</h2>
+            <p>We houden voor dit hoofdstuk de gelijkenis van een school aan. Elke container zit in zijn eigen lokaal met de deur dicht. Dat is veilig. Maar de docent (applicatie) moet wel cijfers kunnen opvragen bij de administratie (database). Docker legt hiervoor automatisch een intercomsysteem aan. In plaats van een ingewikkeld telefoonnummer, hoeft de web-container alleen maar te roepen naar ‘db’ om de database te bereiken.</p>
+            <p>Wanneer je meerdere containers samen opzet in een docker compose zoals <a href="./container.html#stap-7-meerdere-containers-combineren-met-docker-compose">hier benoemd</a> zullen je containers in hetzelfde netwerk komen. Simpel gezegd, ze zullen toegang hebben tot elkaars intercom luidsprekers, omdat ze in dezelfde zones zitten.</p>
     </main>
   </div>
 
