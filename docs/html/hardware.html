@@ -463,19 +463,122 @@
     <nav class="sidebar" aria-labelledby="toc-heading">
       <p class="sidebar-label" id="toc-heading">Op deze pagina</p>
       <ul>
-<li><a href="#navigatie">Navigatie</a></li>
+<li><a href="#minimale-vereisten-voor-docker-desktop">Minimale vereisten voor Docker Desktop</a>
+<ul>
+<li><a href="#windows">Windows</a>
+<ul>
+<li><a href="#minimale-vereisten">Minimale vereisten</a></li>
+<li><a href="#belangrijke-opmerkingen">Belangrijke opmerkingen</a></li>
+</ul></li>
+<li><a href="#macos">macOS</a>
+<ul>
+<li><a href="#minimale-vereisten-1">Minimale vereisten</a></li>
+<li><a href="#belangrijke-opmerkingen-1">Belangrijke opmerkingen</a></li>
+</ul></li>
+<li><a href="#linux">Linux</a>
+<ul>
+<li><a href="#minimale-vereisten-2">Minimale vereisten</a></li>
+</ul></li>
+<li><a href="#algemene-vereisten-alle-platforms">⚙️ Algemene vereisten (alle platforms)</a></li>
+<li><a href="#praktisch-advies">Praktisch advies</a></li>
+</ul></li>
 </ul>
     </nav>
 
     <!-- id for skip-nav; tabindex="-1" allows programmatic focus -->
     <main id="main-content" tabindex="-1">
-            <h1 id="navigatie">Navigatie</h1>
+            <h1 id="minimale-vereisten-voor-docker-desktop">Minimale vereisten voor Docker Desktop</h1>
+            <p>:contentReference<span data-index="0">oaicite:0</span> vereist een aantal hardware- en softwarevoorwaarden om correct te functioneren. Hieronder vind je de minimale vereisten per platform.</p>
+            <hr />
+            <h2 id="windows">Windows</h2>
+            <h3 id="minimale-vereisten">Minimale vereisten</h3>
             <ul>
-            <li><a href="./container.html">Documentatie container</a></li>
-            <li><a href="./souverein.html">Documentatie souvereiniteit</a></li>
-            <li><a href="./hardware.html">Documentatie hardware</a></li>
-            <li><a href="./runner.html">Documentatie runner</a></li>
+            <li><strong>Besturingssysteem:</strong>
+            <ul>
+            <li>Windows 10 64-bit (Pro, Enterprise of Education)</li>
+            <li>Windows 11 64-bit</li>
+            </ul></li>
+            <li><strong>Processor:</strong>
+            <ul>
+            <li>64-bit CPU met SLAT-ondersteuning (Second Level Address Translation)</li>
+            </ul></li>
+            <li><strong>Virtualisatie:</strong>
+            <ul>
+            <li>Intel VT-x of AMD-V ingeschakeld in BIOS/UEFI</li>
+            <li>Hyper-V of WSL 2 ondersteuning vereist</li>
+            </ul></li>
+            <li><strong>RAM:</strong>
+            <ul>
+            <li>Minimaal 4 GB (8 GB aanbevolen)</li>
+            </ul></li>
+            <li><strong>Opslag:</strong>
+            <ul>
+            <li>Minimaal 5 GB vrije schijfruimte (meer aanbevolen)</li>
+            </ul></li>
             </ul>
+            <h3 id="belangrijke-opmerkingen">Belangrijke opmerkingen</h3>
+            <ul>
+            <li>WSL 2 is de aanbevolen backend op Windows 10/11</li>
+            <li>Windows Home ondersteunt Docker Desktop via WSL 2 (niet via Hyper-V)</li>
+            </ul>
+            <hr />
+            <h2 id="macos">macOS</h2>
+            <h3 id="minimale-vereisten-1">Minimale vereisten</h3>
+            <ul>
+            <li><strong>Besturingssysteem:</strong>
+            <ul>
+            <li>Moderne macOS-versie (bijv. macOS 12 Monterey of nieuwer)</li>
+            </ul></li>
+            <li><strong>Hardware:</strong>
+            <ul>
+            <li>Intel Mac of Apple Silicon (M1/M2/M3)</li>
+            </ul></li>
+            <li><strong>RAM:</strong>
+            <ul>
+            <li>Minimaal 4 GB (8 GB+ aanbevolen)</li>
+            </ul></li>
+            <li><strong>Opslag:</strong>
+            <ul>
+            <li>Minimaal 5 GB vrije ruimte</li>
+            </ul></li>
+            </ul>
+            <h3 id="belangrijke-opmerkingen-1">Belangrijke opmerkingen</h3>
+            <ul>
+            <li>Draait via een ingebouwde lightweight VM (HyperKit of Apple Virtualization Framework)</li>
+            </ul>
+            <hr />
+            <h2 id="linux">Linux</h2>
+            <h3 id="minimale-vereisten-2">Minimale vereisten</h3>
+            <ul>
+            <li><strong>OS:</strong>
+            <ul>
+            <li>64-bit Linux distributie (bijv. Ubuntu, Debian, Fedora)</li>
+            </ul></li>
+            <li><strong>Virtualisatie:</strong>
+            <ul>
+            <li>KVM ondersteuning vereist (hardware virtualisatie aan)</li>
+            </ul></li>
+            <li><strong>Systeem:</strong>
+            <ul>
+            <li>systemd vereist</li>
+            </ul></li>
+            <li><strong>RAM:</strong>
+            <ul>
+            <li>Minimaal 4 GB</li>
+            </ul></li>
+            </ul>
+            <hr />
+            <h2 id="algemene-vereisten-alle-platforms">⚙️ Algemene vereisten (alle platforms)</h2>
+            <ul>
+            <li>64-bit CPU (geen 32-bit ondersteuning)</li>
+            <li>Hardware virtualisatie moet ingeschakeld zijn</li>
+            <li>Moderne OS-versie (recent ondersteund)</li>
+            <li>Administrator/root rechten voor installatie</li>
+            </ul>
+            <hr />
+            <h2 id="praktisch-advies">Praktisch advies</h2>
+            <p>Hoewel de minimumvereiste 4 GB RAM is, is dit in de praktijk vaak onvoldoende voor development workloads.</p>
+            <p><strong>Aanbevolen configuratie:</strong> - 8 GB RAM (minimum bruikbaar) - 16 GB RAM of meer (comfortabel voor meerdere containers)</p>
     </main>
   </div>
 
