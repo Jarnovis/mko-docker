@@ -469,10 +469,6 @@
 <li><a href="#wat-heb-je-nodig">Wat heb je nodig?</a></li>
 <li><a href="#stap-1-docker-desktop-starten">Stap 1: Docker Desktop starten</a></li>
 <li><a href="#stap-2-wat-is-een-image-en-wat-is-een-container">Stap 2: Wat is een Image en wat is een Container?</a></li>
-<li><a href="#stap-2-wat-is-een-image-en-wat-is-een-container-1">Stap 2: Wat is een Image en wat is een Container?</a>
-<ul>
-<li><a href="#image-de-blauwdruk-een-werkblad">Image = de blauwdruk (een werkblad)</a></li>
-</ul></li>
 <li><a href="#stap-3-een-image-downloaden-via-docker-hub">Stap 3: Een Image downloaden via Docker Hub</a></li>
 <li><a href="#stap-4-een-container-starten">Stap 4: Een container starten</a></li>
 <li><a href="#stap-5-je-webserver-bekijken-in-de-browser">Stap 5: Je webserver bekijken in de browser</a></li>
@@ -497,7 +493,7 @@
             <h2 id="wat-heb-je-nodig">Wat heb je nodig?</h2>
             <ul>
             <li>Een computer met <a href="https://www.docker.com/products/docker-desktop">Docker Desktop</a> geïnstalleerd.</li>
-            <li>Internetverbinding om een <strong>image</strong> (blauwdruk) te downloaden.</li>
+            <li>Internetverbinding om een <strong>image</strong> (sjabloon) te downloaden.</li>
             <li>Een webbrowser (Chrome, Firefox, Edge).</li>
             </ul>
             <p><img src="images/container/container_windows_icoon.png" alt="Windows icoon" /> <img src="images/container/container_macOS_icoon.png" alt="Mac icoon" /> <img src="images/container/container_gratistedownloaden.png" alt="Gratis downloaden" /></p>
@@ -509,7 +505,7 @@
             </blockquote>
             <hr />
             <h2 id="stap-2-wat-is-een-image-en-wat-is-een-container">Stap 2: Wat is een Image en wat is een Container?</h2>
-            <p><strong>Image = “een werkblad”</strong> Een Image is een afgesloten werkblad dat je kan gebruiken om een container te maken.</p>
+            <p><strong>Image = “een werkblad”</strong> Een Image (sjabloon) is een afgesloten werkblad dat je kan gebruiken om een container te maken.</p>
             <blockquote>
             <p>[!NOTE] Een Image is een gekopieerd werkblad dat nog niet is ingevuld. Het origineel ligt in de kast. Je kunt er zoveel kopieën van maken als je wilt, maar het origineel verandert nooit."</p>
             </blockquote>
@@ -517,18 +513,11 @@
             <blockquote>
             <p>“Schoolse vergelijking: Een leerling pakt een werkblad uit de kast, vult het in, en gebruikt het tijdens de les. Dat ingevulde werkblad is de Container. Als de les klaar is, gooit de leerling het werkblad weg. Morgen begint hij of zij weer met een schoon, nieuw werkblad.”</p>
             </blockquote>
-            <h2 id="stap-2-wat-is-een-image-en-wat-is-een-container-1">Stap 2: Wat is een Image en wat is een Container?</h2>
-            <h3 id="image-de-blauwdruk-een-werkblad">Image = de blauwdruk (een werkblad)</h3>
-            <p>Een <strong>Image</strong> is een kant-en-klare blauwdruk voor een programma. Je kunt het zien als een <strong>gekopieerd werkblad dat nog niet is ingevuld</strong>. Het werkblad ligt klaar in de kast, en je kunt er zoveel kopieën van maken als je wilt. Het origineel blijft altijd hetzelfde.</p>
             <blockquote>
-            <p>[!NOTE]<br />
-            Stel je voor: je hebt een stapel lege werkbladen in je kast liggen. Elk werkblad is precies hetzelfde — dat is de <strong>Image</strong>. Je kunt er oneindig veel kopieën van maken, maar het origineel in de kast verandert nooit.</p>
-            </blockquote>
-            <blockquote>
-            <p>[!IMPORTANT] - Een <strong>Image</strong> is de blauwdruk. Je kunt er niets mee doen tot je er een container van maakt. - Een <strong>Container</strong> is de werkende versie. Stop je hem, dan is de inhoud weg — tenzij je een <strong>volume</strong> gebruikt (zie Stap 8).</p>
+            <p>[!IMPORTANT] - Een <strong>Image</strong> (sjabloon) is een kant-en-klaar bestand met alles wat nodig is om een programma te draaien; je kunt er niets mee doen totdat je er een container van start. - Een <strong>Container</strong> is de werkende versie. Stop je hem, dan is de inhoud weg — tenzij je een <strong>volume</strong> gebruikt (zie Stap 8).</p>
             </blockquote>
             <h2 id="stap-3-een-image-downloaden-via-docker-hub">Stap 3: Een Image downloaden via Docker Hub</h2>
-            <p>Een Image haal je op via <strong>Docker Hub</strong>: een online bibliotheek met duizenden kant-en-klare blauwdrukken voor programma’s.</p>
+            <p>Een Image haal je op via <img src="https://hub.docker.com/" alt="Docker Hub" />: een online bibliotheek met duizenden kant-en-klare sjablonen voor programma’s.</p>
             <ol type="1">
             <li>Klik in Docker Desktop op <strong>Search</strong> (bovenaan).</li>
             <li>Typ <code>nginx</code> in de zoekbalk en druk op Enter.</li>
