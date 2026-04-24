@@ -15,7 +15,7 @@ Je leert hier hoe je een webserver (nginx) start, zodat je zelf een website kunt
 ## Wat heb je nodig?
 
 - Een computer met [Docker Desktop](https://www.docker.com/products/docker-desktop) geïnstalleerd.
-- Internetverbinding om een **image** (blauwdruk) te downloaden.
+- Internetverbinding om een **image** (sjabloon) te downloaden.
 - Een webbrowser (Chrome, Firefox, Edge).
 
 ![Windows icoon](images/container/container_windows_icoon.png) ![Mac icoon](images/container/container_macOS_icoon.png) ![Gratis downloaden](images/container/container_gratistedownloaden.png)
@@ -35,7 +35,7 @@ Als de walvis beweegt, is Docker actief. Staat hij stil? Klik erop om Docker te 
 ## Stap 2: Wat is een Image en wat is een Container?
 
 **Image = "een werkblad"** 
-Een Image is een afgesloten werkblad dat je kan gebruiken om een container te maken.
+Een Image (sjabloon) is een afgesloten werkblad dat je kan gebruiken om een container te maken.
 
 > [!NOTE]
 > Een Image is een gekopieerd werkblad dat nog niet is ingevuld. Het origineel ligt in de kast. Je kunt er zoveel kopieën van maken als je wilt, maar het origineel verandert nooit."
@@ -46,22 +46,13 @@ Een **Container** is een werkende versie van de Image. Het is als het ingevulde 
 > "Schoolse vergelijking:
 > Een leerling pakt een werkblad uit de kast, vult het in, en gebruikt het tijdens de les. Dat ingevulde werkblad is de Container. Als de les klaar is, gooit de leerling het werkblad weg. Morgen begint hij of zij weer met een schoon, nieuw werkblad."
 
-## Stap 2: Wat is een Image en wat is een Container?
-
-### Image = de blauwdruk (een werkblad)
-
-Een **Image** is een kant-en-klare blauwdruk voor een programma. Je kunt het zien als een **gekopieerd werkblad dat nog niet is ingevuld**. Het werkblad ligt klaar in de kast, en je kunt er zoveel kopieën van maken als je wilt. Het origineel blijft altijd hetzelfde.
-
-> [!NOTE]  
-> Stel je voor: je hebt een stapel lege werkbladen in je kast liggen. Elk werkblad is precies hetzelfde — dat is de **Image**. Je kunt er oneindig veel kopieën van maken, maar het origineel in de kast verandert nooit.
-
 > [!IMPORTANT]
-> - Een **Image** is de blauwdruk. Je kunt er niets mee doen tot je er een container van maakt.
+> - Een **Image** (sjabloon) is een kant-en-klaar bestand met alles wat nodig is om een programma te draaien; je kunt er niets mee doen totdat je er een container van start.
 > - Een **Container** is de werkende versie. Stop je hem, dan is de inhoud weg — tenzij je een **volume** gebruikt (zie Stap 8).
 
 ## Stap 3: Een Image downloaden via Docker Hub
 
-Een Image haal je op via **Docker Hub**: een online bibliotheek met duizenden kant-en-klare blauwdrukken voor programma's.
+Een Image haal je op via ![**Docker Hub**](https://hub.docker.com/): een online bibliotheek met duizenden kant-en-klare sjablonen voor programma's.
 
 1. Klik in Docker Desktop op **Search** (bovenaan).
 2. Typ `nginx` in de zoekbalk en druk op Enter.
